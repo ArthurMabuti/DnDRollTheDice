@@ -20,4 +20,11 @@ internal class CharacterStatus
         double modifier = (double)(abilityScore - 10) / 2;
         return (int)Math.Floor(modifier);
     }
+
+    public void InitiativeCheck(int dexterity)
+    {
+        int rollValue = Roll.DiceRoll(1, 20);
+        int finalResult = rollValue + ModifierValue(dexterity);
+        Initiative = finalResult;
+    }
 }
