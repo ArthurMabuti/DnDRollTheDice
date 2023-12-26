@@ -14,4 +14,10 @@ internal class CharacterStatus
     public int Intelligence { get; set; }
     public int Wisdom { get; set; }
     public int Charisma { get; set; }
+
+    public int ModifierValue(int abilityScore)
+    {
+        double modifier = (double)(abilityScore - 10) / 2;
+        return (int)Math.Floor(modifier);
+    }
 }
