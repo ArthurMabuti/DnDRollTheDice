@@ -12,4 +12,5 @@ Console.WriteLine(bruenor.ModifierValue(bruenor.Dexterity));
 
 //Testing Dice Roll
 Roll roll = new();
-Console.WriteLine(roll.DiceRoll(1, 20));
+//Fireball
+Console.WriteLine($"Damage from Fireball: {roll.DiceRoll(8, 6)}");
