@@ -25,12 +25,12 @@ bruenor.GenerateRandomAbilityScore();
 
 void Interface(CharacterStatus character)
 {
-    Console.WriteLine($@"       {character.Name}
-For: {character.Strength} | {bruenor.ModifierValue(bruenor.Strength)}
-Dex: {character.Dexterity} | {bruenor.ModifierValue(bruenor.Dexterity)}
-Con: {character.Constitution} | {bruenor.ModifierValue(bruenor.Constitution)}
-Int: {character.Intelligence} | {bruenor.ModifierValue(bruenor.Intelligence)}
-Wis: {character.Wisdom} | {bruenor.ModifierValue(bruenor.Wisdom)}
-Cha: {character.Charisma} | {bruenor.ModifierValue(bruenor.Charisma)}
+    Console.WriteLine($@"       {character.Name}    {character.Class}
+For: {character.Strength} | {character.ModifierValue(character.Strength)}
+Dex: {character.Dexterity} | {character.ModifierValue(character.Dexterity)}
+Con: {character.Constitution} | {character.ModifierValue(character.Constitution)}
+Int: {character.Intelligence} | {character.ModifierValue(character.Intelligence)}
+Wis: {character.Wisdom} | {character.ModifierValue(character.Wisdom)}
+Cha: {character.Charisma} | {character.ModifierValue(character.Charisma)}
 ");
 }
