@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using DnDRollTheDice.Character.CharacterDetails;
+using DnDRollTheDice.Items;
 
 namespace DnDRollTheDice.Character;
 
@@ -8,14 +9,16 @@ internal class CharacterStatus
     public string? Race { get; set; }
     public string? Class { get; set; }
     public int HitPoints { get; set; }
-    public int ArmorClass { get; set; }
+    public List<ArmorClass> ArmorClass { get; set; }
     public int Initiative { get; set; }
-    public int Speed { get; set; }
+    public Speed Speed { get; set; }
     public Dictionary<string, int> AbilitiesScores { get; set; }
 
     public CharacterStatus()
     {
         AbilitiesScores = new Dictionary<string, int>();
+        ArmorClass = new List<ArmorClass>();
+        Speed = new Speed();
         CreatingAbilityScores();
     }
 
