@@ -1,4 +1,6 @@
-﻿namespace DnDRollTheDice.Character;
+﻿using System.Security.Cryptography;
+
+namespace DnDRollTheDice.Character;
 
 internal class CharacterStatus
 {
@@ -9,16 +11,22 @@ internal class CharacterStatus
     public int ArmorClass { get; set; }
     public int Initiative { get; set; }
     public int Speed { get; set; }
-    public int Strength { get; set; }
-    public int Dexterity { get; set; }
-    public int Constitution { get; set; }
-    public int Intelligence { get; set; }
-    public int Wisdom { get; set; }
-    public int Charisma { get; set; }
+    public Dictionary<string, int> AbilitiesScores { get; set; }
 
     public CharacterStatus()
     {
+        AbilitiesScores = new Dictionary<string, int>();
+        CreatingAbilityScores();
+    }
 
+    private void CreatingAbilityScores()
+    {
+        AbilitiesScores.Add("Strength", 0);
+        AbilitiesScores.Add("Dexterity", 0);
+        AbilitiesScores.Add("Constitution", 0);
+        AbilitiesScores.Add("Intelligence", 0);
+        AbilitiesScores.Add("Wisdom", 0);
+        AbilitiesScores.Add("Charisma", 0);
     }
 
     public int ModifierValue(int abilityScore)
@@ -30,7 +38,7 @@ internal class CharacterStatus
     public void InitiativeCheck()
     {
         int rollValue = Roll.DiceRoll(1, 20);
-        int finalResult = rollValue + ModifierValue(this.Dexterity);
+        int finalResult = rollValue + ModifierValue(AbilitiesScores["Dexterity"]);
         Console.WriteLine($"The dice roll for initiative was {rollValue}");
         Initiative = finalResult;
     }
@@ -55,11 +63,9 @@ internal class CharacterStatus
 
     public void CharacterWithRandomAbilityScore()
     {
-        this.Strength = GenerateRandomAbilityScore();
-        this.Dexterity = GenerateRandomAbilityScore();
-        this.Constitution = GenerateRandomAbilityScore();
-        this.Intelligence = GenerateRandomAbilityScore();
-        this.Wisdom = GenerateRandomAbilityScore();
-        this.Charisma = GenerateRandomAbilityScore();
+        foreach(string abilityName in AbilitiesScores.Keys.ToList())
+        {
+            AbilitiesScores[abilityName] = GenerateRandomAbilityScore();
+        }
     }
 }
