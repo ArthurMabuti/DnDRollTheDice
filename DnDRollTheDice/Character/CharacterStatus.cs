@@ -3,6 +3,7 @@
 internal class CharacterStatus
 {
     public string? Name { get; set; }
+    public string? Race { get; set; }
     public string? Class { get; set; }
     public int HitPoints { get; set; }
     public int ArmorClass { get; set; }
@@ -27,4 +28,6 @@ internal class CharacterStatus
         int finalResult = rollValue + ModifierValue(dexterity);
         Initiative = finalResult;
     }
+
+    public void 
 }
