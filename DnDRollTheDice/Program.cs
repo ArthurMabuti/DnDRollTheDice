@@ -1,5 +1,6 @@
 ﻿using DnDRollTheDice;
 using DnDRollTheDice.Character;
+using System.Runtime.Serialization.Json;
 
 //Testing Modifier Value
 CharacterStatus bruenor = new()
@@ -16,7 +17,7 @@ Interface(bruenor);
 Console.WriteLine($"Damage from Fireball: {Roll.DiceRoll(8, 6)}");
 
 //Testing Initiative
-Console.WriteLine($"Bruenor Dexterity: {bruenor.Dexterity}");
+Console.WriteLine($"Bruenor Dexterity: {bruenor.AbilitiesScores["Dexterity"]}");
 bruenor.InitiativeCheck();
 Console.WriteLine($"Bruenor initiative value is {bruenor.Initiative}");
 
@@ -25,12 +26,16 @@ bruenor.GenerateRandomAbilityScore();
 
 void Interface(CharacterStatus character)
 {
-    Console.WriteLine($@"       {character.Name}    {character.Class}
-For: {character.Strength} | {character.ModifierValue(character.Strength)}
-Dex: {character.Dexterity} | {character.ModifierValue(character.Dexterity)}
-Con: {character.Constitution} | {character.ModifierValue(character.Constitution)}
-Int: {character.Intelligence} | {character.ModifierValue(character.Intelligence)}
-Wis: {character.Wisdom} | {character.ModifierValue(character.Wisdom)}
-Cha: {character.Charisma} | {character.ModifierValue(character.Charisma)}
-");
+    Console.WriteLine($@"{character.Name}    {character.Class}");
+    ShowAbilityScores(character);
+}
+
+void ShowAbilityScores(CharacterStatus character)
+{
+    Dictionary<string, int> abilityScore = character.AbilitiesScores;
+    foreach (string abilityName in abilityScore.Keys.ToList())
+    {
+        string abilityNameAbbreviated = abilityName.Substring(0,3);
+        Console.WriteLine($"{abilityNameAbbreviated}: {abilityScore[abilityName]} | {character.ModifierValue(abilityScore[abilityName])}");
+    }
 }
