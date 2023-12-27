@@ -1,6 +1,8 @@
 ﻿using DnDRollTheDice;
 using DnDRollTheDice.Character;
-using System.Runtime.Serialization.Json;
+using System.Text.Json;
+
+#region Testing Character Status
 
 //Testing Modifier Value
 CharacterStatus bruenor = new()
@@ -23,6 +25,18 @@ Console.WriteLine($"Bruenor initiative value is {bruenor.Initiative}");
 
 //Testing RandomAbilityScore
 bruenor.GenerateRandomAbilityScore();
+#endregion
+
+//Testing Monster API
+
+using(HttpClient client = new HttpClient())
+{
+    string resposta = await client.GetStringAsync("https://www.dnd5eapi.co/api/monsters/goblin/");
+    //Console.WriteLine(resposta);
+    //var personagens = JsonSerializer.Deserialize<List<HarryPotter>>(resposta);
+    Monster? goblin = JsonSerializer.Deserialize<Monster>(resposta);
+    Console.WriteLine(goblin);
+}
 
 void Interface(CharacterStatus character)
 {
