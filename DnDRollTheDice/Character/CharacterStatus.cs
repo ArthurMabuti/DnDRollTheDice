@@ -52,4 +52,14 @@ internal class CharacterStatus
 
         return rollsResult.Sum(); 
     }
+
+    public void CharacterWithRandomAbilityScore()
+    {
+        this.Strength = GenerateRandomAbilityScore();
+        this.Dexterity = GenerateRandomAbilityScore();
+        this.Constitution = GenerateRandomAbilityScore();
+        this.Intelligence = GenerateRandomAbilityScore();
+        this.Wisdom = GenerateRandomAbilityScore();
+        this.Charisma = GenerateRandomAbilityScore();
+    }
 }
