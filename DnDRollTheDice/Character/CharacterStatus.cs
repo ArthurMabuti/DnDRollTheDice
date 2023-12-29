@@ -3,7 +3,7 @@ using DnDRollTheDice.Items;
 
 namespace DnDRollTheDice.Character;
 
-internal class CharacterStatus
+public class CharacterStatus
 {
     public string? Name { get; set; }
     public string? Race { get; set; }
@@ -12,11 +12,11 @@ internal class CharacterStatus
     public List<ArmorClass> ArmorClass { get; set; }
     public int Initiative { get; set; }
     public Speed Speed { get; set; }
-    public Dictionary<string, int> AbilitiesScores { get; set; }
+    public Dictionary<string, int> AbilityScores { get; set; }
 
     public CharacterStatus()
     {
-        AbilitiesScores = new Dictionary<string, int>();
+        AbilityScores = new Dictionary<string, int>();
         ArmorClass = new List<ArmorClass>();
         Speed = new Speed();
         CreatingAbilityScores();
@@ -24,12 +24,12 @@ internal class CharacterStatus
 
     private void CreatingAbilityScores()
     {
-        AbilitiesScores.Add("Strength", 0);
-        AbilitiesScores.Add("Dexterity", 0);
-        AbilitiesScores.Add("Constitution", 0);
-        AbilitiesScores.Add("Intelligence", 0);
-        AbilitiesScores.Add("Wisdom", 0);
-        AbilitiesScores.Add("Charisma", 0);
+        string[] abilityNames = { "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma" };
+
+        foreach(string abilityName in abilityNames)
+        {
+            AbilityScores.Add(abilityName, 0);
+        }
     }
 
     public int ModifierValue(int abilityScore)
@@ -41,7 +41,7 @@ internal class CharacterStatus
     public void InitiativeCheck()
     {
         int rollValue = Roll.DiceRoll(1, 20);
-        int finalResult = rollValue + ModifierValue(AbilitiesScores["Dexterity"]);
+        int finalResult = rollValue + ModifierValue(AbilityScores["Dexterity"]);
         Console.WriteLine($"The dice roll for initiative was {rollValue}");
         Initiative = finalResult;
     }
@@ -66,9 +66,9 @@ internal class CharacterStatus
 
     public void CharacterWithRandomAbilityScore()
     {
-        foreach(string abilityName in AbilitiesScores.Keys.ToList())
+        foreach(string abilityName in AbilityScores.Keys.ToList())
         {
-            AbilitiesScores[abilityName] = GenerateRandomAbilityScore();
+            AbilityScores[abilityName] = GenerateRandomAbilityScore();
         }
     }
 }
