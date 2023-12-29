@@ -1,9 +1,8 @@
 ﻿using DnDRollTheDice.Character;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace DnDRollTheDice.Services;
-public class MonsterService
+public class ApiService
 {
     public async Task<Monster?> GetMonsterFromApiAsync(string monster)
     {
