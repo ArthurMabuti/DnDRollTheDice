@@ -2,7 +2,7 @@
 
 namespace DnDRollTheDice.Items;
 
-internal class ArmorClass
+public class ArmorClass
 {
     [JsonPropertyName("type")]
     public string? Type { get; set; }
