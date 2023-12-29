@@ -1,5 +1,6 @@
 ﻿using DnDRollTheDice;
 using DnDRollTheDice.Character;
+using DnDRollTheDice.Services;
 using System.Text.Json;
 
 #region Testing Character Status
@@ -12,16 +13,16 @@ CharacterStatus bruenor = new()
 };
 bruenor.CharacterWithRandomAbilityScore();
 
-Interface(bruenor);
+//Interface(bruenor);
 
 //Testing Dice Roll
 //Fireball
 Console.WriteLine($"Damage from Fireball: {Roll.DiceRoll(8, 6)}");
 
 //Testing Initiative
-Console.WriteLine($"Bruenor Dexterity: {bruenor.AbilitiesScores["Dexterity"]}");
-bruenor.InitiativeCheck();
-Console.WriteLine($"Bruenor initiative value is {bruenor.Initiative}");
+//Console.WriteLine($"Bruenor Dexterity: {bruenor.AbilityScores["Dexterity"]}");
+//bruenor.InitiativeCheck();
+//Console.WriteLine($"Bruenor initiative value is {bruenor.Initiative}");
 
 //Testing RandomAbilityScore
 bruenor.GenerateRandomAbilityScore();
@@ -29,24 +30,23 @@ bruenor.GenerateRandomAbilityScore();
 
 //Testing Monster API
 
-using(HttpClient client = new HttpClient())
-{
-    string resposta = await client.GetStringAsync("https://www.dnd5eapi.co/api/monsters/goblin/");
-    //Console.WriteLine(resposta);
-    //var personagens = JsonSerializer.Deserialize<List<HarryPotter>>(resposta);
-    Monster? goblin = JsonSerializer.Deserialize<Monster>(resposta);
-    Console.WriteLine(goblin);
-}
+MonsterService monsterService = new();
+//Monster? goblin = await monsterService.GetMonsterFromApiAsync("goblin");
+Monster? goblin = new();
+goblin.UseManualStatus();
+goblin.SettingAbilityScores();
+Console.WriteLine(goblin.Name);
+ShowAbilityScores(goblin);
 
 void Interface(CharacterStatus character)
 {
-    Console.WriteLine($@"{character.Name}    {character.Class}");
+    Console.WriteLine($@"{character.Name} {character.Class}");
     ShowAbilityScores(character);
 }
 
 void ShowAbilityScores(CharacterStatus character)
 {
-    Dictionary<string, int> abilityScore = character.AbilitiesScores;
+    Dictionary<string, int> abilityScore = character.AbilityScores;
     foreach (string abilityName in abilityScore.Keys.ToList())
     {
         string abilityNameAbbreviated = abilityName.Substring(0,3);
