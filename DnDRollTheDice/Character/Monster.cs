@@ -1,9 +1,10 @@
 ﻿using DnDRollTheDice.Character.CharacterDetails;
-using DnDRollTheDice.Items;
+using DnDRollTheDice.Character.CharacterItems;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace DnDRollTheDice.Character;
-public class Monster : CharacterStatus
+internal class Monster : Character
 {
     [JsonPropertyName("name")]
     public new string? Name { get; set; }
@@ -26,11 +27,28 @@ public class Monster : CharacterStatus
     [JsonPropertyName("charisma")]
     public int Charisma { get; set; }
 
-    public Monster()
+    public Monster() : base()
     {
-        AbilityScores = new Dictionary<string, int>();
-        ArmorClass = new List<ArmorClass>();
-        Speed = new Speed();
+    }
+
+    public void CopyPropertiesToBase()
+    {
+        // Retrieve all public properties of the Character class
+        List<PropertyInfo> characterProperties = typeof(Character).GetProperties().ToList();
+
+        // Iterate over the properties of the Character class
+        foreach (var characterProperty in characterProperties)
+        {
+            // Retrieve the corresponding property in the Monster class
+            PropertyInfo monsterProperty = typeof(Monster).GetProperty(characterProperty.Name);
+
+            // If the corresponding property is found, copy the value
+            if (monsterProperty != null)
+            {
+                object monsterValue = monsterProperty.GetValue(this);
+                characterProperty.SetValue(this, monsterValue);
+            }
+        }
     }
 
     public void SettingAbilityScores()
@@ -63,6 +81,7 @@ public class Monster : CharacterStatus
         Wisdom = 8;
         Charisma = 8;
     }
+
 
     public override string? ToString()
     {
