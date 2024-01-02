@@ -2,7 +2,7 @@
 using System.Text.Json;
 
 namespace DnDRollTheDice.Services;
-public class ApiService
+internal class ApiService
 {
     public async Task<Monster?> GetMonsterFromApiAsync(string monster)
     {
@@ -11,6 +11,7 @@ public class ApiService
             string answer = await client.GetStringAsync($"https://www.dnd5eapi.co/api/monsters/{monster}/");
             Monster? newMonster = JsonSerializer.Deserialize<Monster>(answer);
             newMonster?.SettingAbilityScores();
+            newMonster?.CopyPropertiesToBase();
             return newMonster;
         }
     }
