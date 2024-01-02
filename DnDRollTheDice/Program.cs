@@ -1,12 +1,11 @@
 ﻿using DnDRollTheDice;
 using DnDRollTheDice.Character;
 using DnDRollTheDice.Services;
-using System.Text.Json;
 
 #region Testing Character Status
 
 //Testing Modifier Value
-CharacterStatus bruenor = new()
+PlayerCharacter bruenor = new()
 {
     Name = "Bruenor",
     Class = "Fighter",
@@ -30,26 +29,10 @@ bruenor.GenerateRandomAbilityScore();
 
 //Testing Monster API
 
-MonsterService monsterService = new();
-//Monster? goblin = await monsterService.GetMonsterFromApiAsync("goblin");
-Monster? goblin = new();
-goblin.UseManualStatus();
-goblin.SettingAbilityScores();
-Console.WriteLine(goblin.Name);
-ShowAbilityScores(goblin);
+ApiService monsterService = new();
+Monster? goblin = await monsterService.GetMonsterFromApiAsync("goblin");
+//Monster? goblin = new();
+//goblin.UseManualStatus();
+//goblin.SettingAbilityScores();
+goblin.Interface();
 
-void Interface(CharacterStatus character)
-{
-    Console.WriteLine($@"{character.Name} {character.Class}");
-    ShowAbilityScores(character);
-}
-
-void ShowAbilityScores(CharacterStatus character)
-{
-    Dictionary<string, int> abilityScore = character.AbilityScores;
-    foreach (string abilityName in abilityScore.Keys.ToList())
-    {
-        string abilityNameAbbreviated = abilityName.Substring(0,3);
-        Console.WriteLine($"{abilityNameAbbreviated}: {abilityScore[abilityName]} | {character.ModifierValue(abilityScore[abilityName])}");
-    }
-}
