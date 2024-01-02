@@ -36,7 +36,7 @@ internal class Character
     }
     public void Interface()
     {
-        Console.WriteLine($@"{Name} {ArmorClass.First().Value}");
+        Console.WriteLine($@"{Name} CA: {ArmorClass.First().Value}");
         ShowAbilityScores();
     }
     public void ShowAbilityScores()
@@ -56,5 +56,11 @@ internal class Character
         int attackValue = Roll.DiceRoll(1, 20) + rangeSkillBased + Proficiency;
 
         return attackValue;
+    }
+    public bool ReachArmorClass(Character character)
+    {
+        if(AttackRoll() >= character.ArmorClass.First().Value)
+            return true;
+        return false;
     }
 }
