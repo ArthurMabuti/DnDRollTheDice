@@ -1,5 +1,6 @@
 ﻿using DnDRollTheDice;
 using DnDRollTheDice.Character;
+using DnDRollTheDice.Character.CharacterItems;
 using DnDRollTheDice.Services;
 
 #region Testing Character Status
@@ -9,14 +10,16 @@ PlayerCharacter bruenor = new()
 {
     Name = "Bruenor",
     Class = "Fighter",
+    Proficiency = 2
 };
+bruenor.ArmorClass = new(){ new ArmorClass() { Type = "Armor", Value = 18, Armor = new List<Armor>() }};
 bruenor.CharacterWithRandomAbilityScore();
 
-//Interface(bruenor);
+bruenor.Interface();
 
 //Testing Dice Roll
 //Fireball
-Console.WriteLine($"Damage from Fireball: {Roll.DiceRoll(8, 6)}");
+//Console.WriteLine($"Damage from Fireball: {Roll.DiceRoll(8, 6)}");
 
 //Testing Initiative
 //Console.WriteLine($"Bruenor Dexterity: {bruenor.AbilityScores["Dexterity"]}");
@@ -24,15 +27,25 @@ Console.WriteLine($"Damage from Fireball: {Roll.DiceRoll(8, 6)}");
 //Console.WriteLine($"Bruenor initiative value is {bruenor.Initiative}");
 
 //Testing RandomAbilityScore
-bruenor.GenerateRandomAbilityScore();
+//bruenor.GenerateRandomAbilityScore();
 #endregion
 
-//Testing Monster API
+ApiService apiService = new();
 
-ApiService monsterService = new();
-Monster? goblin = await monsterService.GetMonsterFromApiAsync("goblin");
+#region Testing Monster API
+
+Monster? goblin = await apiService.GetMonsterFromApiAsync("goblin");
+
 //Monster? goblin = new();
 //goblin.UseManualStatus();
 //goblin.SettingAbilityScores();
-goblin.Interface();
+//goblin.Interface();
+#endregion
 
+#region Testing Weapon API
+
+Weapon? greatsword = await apiService.GetWeaponFromApiAsync("greatsword");
+bruenor.Weapon = greatsword;
+Console.WriteLine(bruenor.ReachArmorClass(goblin));
+
+#endregion
