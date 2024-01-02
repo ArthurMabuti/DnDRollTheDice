@@ -26,6 +26,9 @@ internal class Monster : Character
     public int Wisdom { get; set; }
     [JsonPropertyName("charisma")]
     public int Charisma { get; set; }
+    [JsonPropertyName("proficiency_bonus")]
+    public new int Proficiency {  get; set; }
+
 
     public Monster() : base()
     {
