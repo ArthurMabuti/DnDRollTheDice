@@ -11,12 +11,15 @@ internal class Character
     public int Initiative { get; set; }
     public Speed Speed { get; set; }
     public Dictionary<string, int> AbilityScores { get; set; }
+    public int Proficiency { get; set; }
+    public Weapon Weapon { get; set; }
 
     public Character()
     {
         AbilityScores = new Dictionary<string, int>();
         ArmorClass = new List<ArmorClass>();
         Speed = new Speed();
+        Weapon = new Weapon();
     }
 
     public int ModifierValue(int abilityScore)
@@ -24,7 +27,6 @@ internal class Character
         double modifier = (double)(abilityScore - 10) / 2;
         return (int)Math.Floor(modifier);
     }
-
     public void InitiativeCheck()
     {
         int rollValue = Roll.DiceRoll(1, 20);
@@ -37,7 +39,6 @@ internal class Character
         Console.WriteLine($@"{Name} {ArmorClass.First().Value}");
         ShowAbilityScores();
     }
-
     public void ShowAbilityScores()
     {
         Dictionary<string, int> abilityScore = AbilityScores;
@@ -46,5 +47,14 @@ internal class Character
             string abilityNameAbbreviated = abilityName.Substring(0, 3);
             Console.WriteLine($"{abilityNameAbbreviated}: {abilityScore[abilityName]} | {ModifierValue(abilityScore[abilityName])}");
         }
+    }
+    public int AttackRoll()
+    {
+        int skillUsed = (AbilityScores["Strength"] > AbilityScores["Dexterity"]) ? AbilityScores["Strength"] : AbilityScores["Dexterity"];
+        int rangeSkillBased = (this.Weapon.Range == "Ranged") ? ModifierValue(AbilityScores["Dexterity"]) : ModifierValue(skillUsed);
+        
+        int attackValue = Roll.DiceRoll(1, 20) + rangeSkillBased + Proficiency;
+
+        return attackValue;
     }
 }
