@@ -80,7 +80,7 @@ internal class Character
         if (ReachArmorClass(character, attackRoll))
         {
             Console.WriteLine("Attack successful!");
-            int damage = Weapon.DamageRoll();
+            int damage = Weapon.DamageRoll(CriticalStrike(attackRoll));
             Console.WriteLine($"Damage = {damage}");
             character.HitPoints -= damage;
             Console.WriteLine($"Actual HP from {character.Name} = {character.HitPoints}");
