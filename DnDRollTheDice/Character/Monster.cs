@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using DnDRollTheDice.Character.CharacterDetails;
+using DnDRollTheDice.Character.CharacterItems;
 
 namespace DnDRollTheDice.Character;
 internal class Monster : Character
@@ -24,6 +25,35 @@ internal class Monster : Character
         Actions = [];
     }
 
+    public Actions SelectMonsterAction(string actionName)
+    {
+        Actions monsterAction = Actions.Find(act => act.Name == actionName)!;
+        return monsterAction;
+    }
+
+    public int AttackRoll(string actionName)
+    {
+        int diceRolled = Roll.DiceRoll(1, 20);
+
+        int attackValue = diceRolled + SelectMonsterAction(actionName)!.AttackBonus;
+        return attackValue;
+    }
+
+    public void DealingDamage(Character character, string actionName)
+    {
+        int attackRoll = AttackRoll(actionName);
+        if (ReachArmorClass(character, attackRoll))
+        {
+            Console.WriteLine("Attack successful!");
+            int damage = SelectMonsterAction(actionName).Damage!.DamageRoll(CriticalHit(attackRoll));
+            Console.WriteLine($"Damage = {damage}");
+            character.HitPoints -= damage;
+            Console.WriteLine($"Actual HP from {character.Name} = {character.HitPoints}");
+        }
+        else
+            Console.WriteLine("Attack missed!");
+    }
+
     public void SettingAbilityScores()
     {
         foreach (var property in typeof(Monster).GetProperties())
@@ -43,7 +73,7 @@ internal class Monster : Character
     public void UseManualStatus()
     {
         Name = "Goblin";
-        ArmorClass.Add(new() { Type = "armor", Value = 15 });
+        ArmorClass = new ArmorClass { Type = "armor", Value = 15 };
         HitPoints = 7;
         Speed = new() { Locomotion = "9m"};
         Strength = 8;
