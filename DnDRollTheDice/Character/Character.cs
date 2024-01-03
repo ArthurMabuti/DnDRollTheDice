@@ -56,8 +56,7 @@ internal class Character
     }
     public int AttackRoll()
     {
-        int skillUsed = (AbilityScores["Strength"] > AbilityScores["Dexterity"]) ? AbilityScores["Strength"] : AbilityScores["Dexterity"];
-        int rangeSkillBased = (this.Weapon.Range == "Ranged") ? ModifierValue(AbilityScores["Dexterity"]) : ModifierValue(skillUsed);
+        int rangeSkillBased = (this.Weapon.Range == "Ranged") ? ModifierValue(AbilityScores["Dexterity"]) : ModifierValue(BestFightingSkill());
 
         int diceRolled = Roll.DiceRoll(1, 20);
 
@@ -66,9 +65,9 @@ internal class Character
         Console.WriteLine($"Attack Roll = Dice({diceRolled}) + Skill Bonus({rangeSkillBased}) + Proficiency Bonus({Proficiency}) = {attackValue}");
         return attackValue;
     }
-    public bool ReachArmorClass(Character character)
+    public bool ReachArmorClass(Character character, int attackRoll)
     {
-        if (AttackRoll() >= character.ArmorClass.First().Value)
+        if (attackRoll >= character.ArmorClass.First().Value)
         {
             return true;
         }
@@ -77,15 +76,33 @@ internal class Character
 
     public void DealingDamage(Character character)
     {
-        if (ReachArmorClass(character))
+        int attackRoll = AttackRoll();
+        if (ReachArmorClass(character, attackRoll))
         {
             Console.WriteLine("Attack successful!");
+
             int damage = Weapon.DamageRoll();
+
             Console.WriteLine($"Damage = {damage}");
             character.HitPoints -= damage;
             Console.WriteLine($"Actual HP from {character.Name} = {character.HitPoints}");
         }
         else
             Console.WriteLine("Attack missed!");
+    }
+
+    public bool CriticalStrike(int attackRoll)
+    {
+        int attackDiceRoll = 
+
+        if(attackRoll == 20)
+            return true;
+        return false;
+    }
+
+    public int BestFightingSkill()
+    {
+        int fightingSkill = (AbilityScores["Strength"] > AbilityScores["Dexterity"]) ? AbilityScores["Strength"] : AbilityScores["Dexterity"];
+        return fightingSkill;
     }
 }
