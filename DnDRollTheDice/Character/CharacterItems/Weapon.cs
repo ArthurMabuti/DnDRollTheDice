@@ -17,14 +17,14 @@ internal class Weapon
         Damage = new Damage();
     }
 
-    public int DamageRoll(bool criticalStrike)
+    public int DamageRoll(bool criticalHit)
     {
         string[]? diceRollInformation = Damage?.DamageDice?.Split('d');
         int numberOfDices = int.Parse(diceRollInformation![0]);
-        if (criticalStrike)
+        if (criticalHit)
         {
             numberOfDices *= 2;
-            Console.WriteLine("*CRITICAL STRIKE*");
+            Console.WriteLine("*CRITICAL HIT*");
         }
             
         int diceSides = int.Parse(diceRollInformation[1]);
