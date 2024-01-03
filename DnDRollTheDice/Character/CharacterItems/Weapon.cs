@@ -17,10 +17,12 @@ internal class Weapon
         Damage = new Damage();
     }
 
-    public int DamageRoll()
+    public int DamageRoll(bool criticalStrike)
     {
         string[]? diceRollInformation = Damage?.DamageDice?.Split('d');
         int numberOfDices = int.Parse(diceRollInformation![0]);
+        if (criticalStrike)
+            numberOfDices *= 2;
         int diceSides = int.Parse(diceRollInformation[1]);
 
         int rollValue = Roll.DiceRoll(numberOfDices, diceSides);
