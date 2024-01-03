@@ -1,7 +1,5 @@
-﻿using DnDRollTheDice.Character.CharacterDetails;
-using DnDRollTheDice.Character.CharacterItems;
-using System.Reflection;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using DnDRollTheDice.Character.CharacterDetails;
 
 namespace DnDRollTheDice.Character;
 internal class Monster : Character
@@ -18,9 +16,11 @@ internal class Monster : Character
     public int Wisdom { get; set; }
     [JsonPropertyName("charisma")]
     public int Charisma { get; set; }
+    public List<Actions> Actions { get; set; }
 
     public Monster() : base()
     {
+        Actions = new List<Actions>();
     }
 
     public void SettingAbilityScores()
