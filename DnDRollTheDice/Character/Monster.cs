@@ -16,11 +16,12 @@ internal class Monster : Character
     public int Wisdom { get; set; }
     [JsonPropertyName("charisma")]
     public int Charisma { get; set; }
+    [JsonPropertyName("actions")]
     public List<Actions> Actions { get; set; }
 
     public Monster() : base()
     {
-        Actions = new List<Actions>();
+        Actions = [];
     }
 
     public void SettingAbilityScores()
@@ -51,11 +52,5 @@ internal class Monster : Character
         Intelligence = 10;
         Wisdom = 8;
         Charisma = 8;
-    }
-
-
-    public override string? ToString()
-    {
-        return $"Monster: {Name} | AC {ArmorClass.First().Value} | HP {HitPoints}";
     }
 }

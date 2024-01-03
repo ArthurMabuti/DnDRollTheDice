@@ -22,10 +22,10 @@ internal class Character
 
     public Character()
     {
-        AbilityScores = new Dictionary<string, int>();
-        ArmorClass = new List<ArmorClass>();
-        Speed = new Speed();
-        Weapon = new Weapon();
+        AbilityScores = [];
+        ArmorClass = [];
+        Speed = new();
+        Weapon = new();
     }
 
     public int ModifierValue(int abilityScore)
