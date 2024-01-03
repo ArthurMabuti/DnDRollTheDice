@@ -10,5 +10,6 @@ public class Actions
     [JsonPropertyName("attack_bonus")]
     public int AttackBonus { get; set; }
     [JsonPropertyName("damage")]
-    public List<Damage>? Damage { get; set; }
+    private List<Damage>? damage { get; set; }
+    public Damage Damage => damage!.First();
 }
