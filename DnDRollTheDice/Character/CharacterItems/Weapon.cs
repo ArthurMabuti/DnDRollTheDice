@@ -22,7 +22,11 @@ internal class Weapon
         string[]? diceRollInformation = Damage?.DamageDice?.Split('d');
         int numberOfDices = int.Parse(diceRollInformation![0]);
         if (criticalStrike)
+        {
             numberOfDices *= 2;
+            Console.WriteLine("*CRITICAL STRIKE*");
+        }
+            
         int diceSides = int.Parse(diceRollInformation[1]);
 
         int rollValue = Roll.DiceRoll(numberOfDices, diceSides);
