@@ -1,16 +1,22 @@
 ﻿using DnDRollTheDice.Character.CharacterDetails;
 using DnDRollTheDice.Character.CharacterItems;
+using System.Text.Json.Serialization;
 
 namespace DnDRollTheDice.Character;
 internal class Character
 {
+    [JsonPropertyName("name")]
     public string? Name { get; set; }
     public string? Race { get; set; }
+    [JsonPropertyName("hit_points")]
     public int HitPoints { get; set; }
+    [JsonPropertyName("armor_class")]
     public List<ArmorClass> ArmorClass { get; set; }
     public int Initiative { get; set; }
+    [JsonPropertyName("speed")]
     public Speed Speed { get; set; }
     public Dictionary<string, int> AbilityScores { get; set; }
+    [JsonPropertyName("proficiency_bonus")]
     public int Proficiency { get; set; }
     public Weapon Weapon { get; set; }
 
@@ -52,15 +58,34 @@ internal class Character
     {
         int skillUsed = (AbilityScores["Strength"] > AbilityScores["Dexterity"]) ? AbilityScores["Strength"] : AbilityScores["Dexterity"];
         int rangeSkillBased = (this.Weapon.Range == "Ranged") ? ModifierValue(AbilityScores["Dexterity"]) : ModifierValue(skillUsed);
-        
-        int attackValue = Roll.DiceRoll(1, 20) + rangeSkillBased + Proficiency;
 
+        int diceRolled = Roll.DiceRoll(1, 20);
+
+        int attackValue = diceRolled + rangeSkillBased + Proficiency;
+
+        Console.WriteLine($"Attack Roll = Dice({diceRolled}) + Skill Bonus({rangeSkillBased}) + Proficiency Bonus({Proficiency}) = {attackValue}");
         return attackValue;
     }
     public bool ReachArmorClass(Character character)
     {
-        if(AttackRoll() >= character.ArmorClass.First().Value)
+        if (AttackRoll() >= character.ArmorClass.First().Value)
+        {
             return true;
+        }
         return false;
+    }
+
+    public void DealingDamage(Character character)
+    {
+        if (ReachArmorClass(character))
+        {
+            Console.WriteLine("Attack successful!");
+            int damage = Weapon.DamageRoll();
+            Console.WriteLine($"Damage = {damage}");
+            character.HitPoints -= damage;
+            Console.WriteLine($"Actual HP from {character.Name} = {character.HitPoints}");
+        }
+        else
+            Console.WriteLine("Attack missed!");
     }
 }

@@ -45,7 +45,17 @@ Monster? goblin = await apiService.GetMonsterFromApiAsync("goblin");
 #region Testing Weapon API
 
 Weapon? greatsword = await apiService.GetWeaponFromApiAsync("greatsword");
-bruenor.Weapon = greatsword;
-Console.WriteLine(bruenor.ReachArmorClass(goblin));
+bruenor.Weapon = greatsword!;
+//Console.WriteLine(bruenor.ReachArmorClass(goblin!));
+
+#endregion
+
+#region Testing Combat System
+
+while(goblin!.HitPoints > 0)
+{
+    Console.WriteLine($"Goblin HP({goblin.HitPoints})");
+    bruenor.DealingDamage(goblin);
+}
 
 #endregion

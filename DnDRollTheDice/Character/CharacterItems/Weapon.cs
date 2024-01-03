@@ -20,7 +20,7 @@ internal class Weapon
     public int DamageRoll()
     {
         string[]? diceRollInformation = Damage?.DamageDice?.Split('d');
-        int numberOfDices = int.Parse(diceRollInformation[0]);
+        int numberOfDices = int.Parse(diceRollInformation![0]);
         int diceSides = int.Parse(diceRollInformation[1]);
 
         int rollValue = Roll.DiceRoll(numberOfDices, diceSides);

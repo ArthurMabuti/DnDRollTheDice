@@ -6,14 +6,6 @@ using System.Text.Json.Serialization;
 namespace DnDRollTheDice.Character;
 internal class Monster : Character
 {
-    [JsonPropertyName("name")]
-    public new string? Name { get; set; }
-    [JsonPropertyName("armor_class")]
-    public new List<ArmorClass> ArmorClass { get; set; }
-    [JsonPropertyName("hit_points")]
-    public new int HitPoints { get; set; }
-    [JsonPropertyName("speed")]
-    public new Speed Speed { get; set; }
     [JsonPropertyName("strength")]
     public int Strength { get; set; }
     [JsonPropertyName("dexterity")]
@@ -26,32 +18,9 @@ internal class Monster : Character
     public int Wisdom { get; set; }
     [JsonPropertyName("charisma")]
     public int Charisma { get; set; }
-    [JsonPropertyName("proficiency_bonus")]
-    public new int Proficiency {  get; set; }
-
 
     public Monster() : base()
     {
-    }
-
-    public void CopyPropertiesToBase()
-    {
-        // Retrieve all public properties of the Character class
-        List<PropertyInfo> characterProperties = typeof(Character).GetProperties().ToList();
-
-        // Iterate over the properties of the Character class
-        foreach (var characterProperty in characterProperties)
-        {
-            // Retrieve the corresponding property in the Monster class
-            PropertyInfo monsterProperty = typeof(Monster).GetProperty(characterProperty.Name);
-
-            // If the corresponding property is found, copy the value
-            if (monsterProperty != null)
-            {
-                object monsterValue = monsterProperty.GetValue(this);
-                characterProperty.SetValue(this, monsterValue);
-            }
-        }
     }
 
     public void SettingAbilityScores()
@@ -65,8 +34,7 @@ internal class Monster : Character
 
             if (property.PropertyType == typeof(int) && property.GetCustomAttributes(typeof(JsonPropertyNameAttribute), true).Length > 0)
             {
-                var attributeName = ((JsonPropertyNameAttribute)property.GetCustomAttributes(typeof(JsonPropertyNameAttribute), true)[0]).Name;
-                AbilityScores.Add(property.Name, (int)property.GetValue(this));
+                AbilityScores.Add(property.Name, (int)property.GetValue(this)!);
             }
         }
     }
