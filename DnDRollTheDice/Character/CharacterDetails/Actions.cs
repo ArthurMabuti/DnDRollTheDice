@@ -4,9 +4,11 @@ namespace DnDRollTheDice.Character.CharacterDetails;
 public class Actions
 {
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string? Name { get; set; }
     [JsonPropertyName("desc")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
+    [JsonPropertyName("attack_bonus")]
+    public int AttackBonus { get; set; }
     [JsonPropertyName("damage")]
-    public List<Damage> Damage { get; set; }
+    public List<Damage>? Damage { get; set; }
 }
