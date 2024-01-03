@@ -80,9 +80,7 @@ internal class Character
         if (ReachArmorClass(character, attackRoll))
         {
             Console.WriteLine("Attack successful!");
-
             int damage = Weapon.DamageRoll();
-
             Console.WriteLine($"Damage = {damage}");
             character.HitPoints -= damage;
             Console.WriteLine($"Actual HP from {character.Name} = {character.HitPoints}");
@@ -93,9 +91,9 @@ internal class Character
 
     public bool CriticalStrike(int attackRoll)
     {
-        int attackDiceRoll = 
+        int attackDiceRoll = attackRoll - ModifierValue(BestFightingSkill()) - Proficiency;
 
-        if(attackRoll == 20)
+        if(attackDiceRoll == 20)
             return true;
         return false;
     }
