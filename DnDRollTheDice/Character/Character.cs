@@ -11,11 +11,11 @@ internal class Character
     [JsonPropertyName("hit_points")]
     public int HitPoints { get; set; }
     [JsonPropertyName("armor_class")]
-    private List<ArmorClass> armorClass { get; set; }
+    public List<ArmorClass> armorClass { get; set; }
     public ArmorClass ArmorClass
     {
         get => armorClass.First();
-        set => armorClass = new List<ArmorClass> { value };
+        set => armorClass = [value];
     }
     public int Initiative { get; set; }
     [JsonPropertyName("speed")]
@@ -30,6 +30,7 @@ internal class Character
         AbilityScores = [];
         Speed = new();
         Weapon = new();
+        armorClass = [];
     }
 
     public static int ModifierValue(int abilityScore)
@@ -84,7 +85,7 @@ internal class Character
         if (ReachArmorClass(character, attackRoll))
         {
             Console.WriteLine("Attack successful!");
-            int damage = Weapon.Damage!.DamageRoll(CriticalHit(attackRoll));
+            int damage = Weapon.Damage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill());
             Console.WriteLine($"Damage = {damage}");
             character.HitPoints -= damage;
             Console.WriteLine($"Actual HP from {character.Name} = {character.HitPoints}");
