@@ -10,9 +10,10 @@ PlayerCharacter bruenor = new()
 {
     Name = "Bruenor",
     Class = "Fighter",
-    Proficiency = 2
+    Proficiency = 2,
+    HitPoints = 16
 };
-bruenor.ArmorClass = new(){ new ArmorClass() { Type = "Armor", Value = 18, Armor = new List<Armor>() }};
+bruenor.ArmorClass = new ArmorClass() { Type = "Armor", Value = 18, Armor = new List<Armor>() };
 bruenor.CharacterWithRandomAbilityScore();
 
 bruenor.Interface();
@@ -52,10 +53,19 @@ bruenor.Weapon = greatsword!;
 
 #region Testing Combat System
 
-while(goblin!.HitPoints > 0)
+while(bruenor!.HitPoints > 0 && goblin!.HitPoints > 0)
 {
+    Console.WriteLine("Bruenor ataca Goblin");
     Console.WriteLine($"Goblin HP({goblin.HitPoints})");
     bruenor.DealingDamage(goblin);
+    Console.WriteLine($"Bruenor HP({bruenor!.HitPoints})");
+    Console.WriteLine("Which action do you want to use to attack?");
+    foreach (var monsterAction in goblin!.Actions)
+    {
+        Console.WriteLine(monsterAction.Name);
+    }
+    string attackOption = Console.ReadLine()!;
+    goblin.DealingDamage(bruenor, attackOption);
 }
 
 #endregion

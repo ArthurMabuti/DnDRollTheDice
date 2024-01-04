@@ -11,7 +11,12 @@ internal class Character
     [JsonPropertyName("hit_points")]
     public int HitPoints { get; set; }
     [JsonPropertyName("armor_class")]
-    public List<ArmorClass> ArmorClass { get; set; }
+    public List<ArmorClass> armorClass { get; set; }
+    public ArmorClass ArmorClass
+    {
+        get => armorClass.First();
+        set => armorClass = [value];
+    }
     public int Initiative { get; set; }
     [JsonPropertyName("speed")]
     public Speed Speed { get; set; }
@@ -22,13 +27,13 @@ internal class Character
 
     public Character()
     {
-        AbilityScores = new Dictionary<string, int>();
-        ArmorClass = new List<ArmorClass>();
-        Speed = new Speed();
-        Weapon = new Weapon();
+        AbilityScores = [];
+        Speed = new();
+        Weapon = new();
+        armorClass = [];
     }
 
-    public int ModifierValue(int abilityScore)
+    public static int ModifierValue(int abilityScore)
     {
         double modifier = (double)(abilityScore - 10) / 2;
         return (int)Math.Floor(modifier);
@@ -42,7 +47,7 @@ internal class Character
     }
     public void Interface()
     {
-        Console.WriteLine($@"{Name} CA: {ArmorClass.First().Value}");
+        Console.WriteLine($@"{Name} CA: {ArmorClass.Value}");
         ShowAbilityScores();
     }
     public void ShowAbilityScores()
@@ -65,22 +70,22 @@ internal class Character
         Console.WriteLine($"Attack Roll = Dice({diceRolled}) + Skill Bonus({rangeSkillBased}) + Proficiency Bonus({Proficiency}) = {attackValue}");
         return attackValue;
     }
-    public bool ReachArmorClass(Character character, int attackRoll)
+    public static bool ReachArmorClass(Character character, int attackRoll)
     {
-        if (attackRoll >= character.ArmorClass.First().Value)
+        if (attackRoll >= character.ArmorClass.Value)
         {
             return true;
         }
         return false;
     }
 
-    public void DealingDamage(Character character)
+    public virtual void DealingDamage(Character character)
     {
         int attackRoll = AttackRoll();
         if (ReachArmorClass(character, attackRoll))
         {
             Console.WriteLine("Attack successful!");
-            int damage = Weapon.DamageRoll(CriticalHit(attackRoll));
+            int damage = Weapon.Damage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill());
             Console.WriteLine($"Damage = {damage}");
             character.HitPoints -= damage;
             Console.WriteLine($"Actual HP from {character.Name} = {character.HitPoints}");
