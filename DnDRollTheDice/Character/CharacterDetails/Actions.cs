@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using DnDRollTheDice.Character.CharacterItems;
+using System.Text.Json.Serialization;
 
 namespace DnDRollTheDice.Character.CharacterDetails;
 public class Actions
@@ -10,10 +11,14 @@ public class Actions
     [JsonPropertyName("attack_bonus")]
     public int AttackBonus { get; set; }
     [JsonPropertyName("damage")]
-    private List<Damage>? damage { get; set; }
-    public Damage Damage
+    public List<Damage>? damage { get; set; }
+    public Damage? Damage
     {
         get => damage!.First();
-        set => damage = new List<Damage> { value };
+        set => damage = [value!];
+    }
+
+    public Actions()
+    {
     }
 }
