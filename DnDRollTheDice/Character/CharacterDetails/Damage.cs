@@ -16,9 +16,15 @@ public class Damage
             Console.WriteLine("*CRITICAL HIT*");
         }
 
-        int diceSides = int.Parse(diceRollInformation[1]);
+        string[] sidesAndBonusInformation = diceRollInformation[1].Split('+');
+        int diceSides = int.Parse(sidesAndBonusInformation[0]);
+        int attackBonus = 0;
+        if (sidesAndBonusInformation.Length > 1)
+        {
+            attackBonus = int.Parse(sidesAndBonusInformation[1]);
+        }
 
         int rollValue = Roll.DiceRoll(numberOfDices, diceSides);
-        return rollValue;
+        return rollValue + attackBonus;
     }
 }
