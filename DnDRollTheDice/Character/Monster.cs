@@ -54,6 +54,16 @@ internal class Monster : Character
             Console.WriteLine("Attack missed!");
     }
 
+    public void MultiAttack()
+    {
+        List<Actions> allActions = Actions;
+        Actions multiattack = Actions.Find(act => act.Name == "Multiattack")!;
+        foreach (var action in multiattack.MultiAttackActions)
+        {
+            Actions multiAttackAction = allActions.Find(multi => multi.Name == action.Name)!;
+        }
+    }
+
     public void SettingAbilityScores()
     {
         foreach (var property in typeof(Monster).GetProperties())

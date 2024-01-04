@@ -18,6 +18,15 @@ public class Actions
         set => damage = [value!];
     }
 
+    //Multiattack Properties
+
+    [JsonPropertyName("actions")]
+    public List<Actions> MultiAttackActions { get; set; }
+    [JsonPropertyName("action_name")]
+    public string ActionName { get; set; }
+    [JsonPropertyName("count")]
+    public int Count { get; set; }
+
     public Actions()
     {
     }
