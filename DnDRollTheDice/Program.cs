@@ -35,37 +35,37 @@ ApiService apiService = new();
 
 #region Testing Monster API
 
-Monster? goblin = await apiService.GetMonsterFromApiAsync("goblin");
+Monster? monster = await apiService.GetMonsterFromApiAsync("griffon");
 
-//Monster? goblin = new();
-//goblin.UseManualStatus();
-//goblin.SettingAbilityScores();
-//goblin.Interface();
+//Monster? monster = new();
+//monster.UseManualStatus();
+//monster.SettingAbilityScores();
+//monster.Interface();
 #endregion
 
 #region Testing Weapon API
 
 Weapon? greatsword = await apiService.GetWeaponFromApiAsync("greatsword");
 bruenor.Weapon = greatsword!;
-//Console.WriteLine(bruenor.ReachArmorClass(goblin!));
+//Console.WriteLine(bruenor.ReachArmorClass(monster!));
 
 #endregion
 
 #region Testing Combat System
 
-while(bruenor!.HitPoints > 0 && goblin!.HitPoints > 0)
+while(bruenor!.HitPoints > 0 && monster!.HitPoints > 0)
 {
-    Console.WriteLine("Bruenor ataca Goblin");
-    Console.WriteLine($"Goblin HP({goblin.HitPoints})");
-    bruenor.DealingDamage(goblin);
-    Console.WriteLine($"Bruenor HP({bruenor!.HitPoints})");
+    Console.WriteLine($"{bruenor.Name} attacks {monster.Name}");
+    Console.WriteLine($"{monster.Name} HP({monster.HitPoints})");
+    bruenor.DealingDamage(monster);
+    Console.WriteLine($"{bruenor.Name} HP({bruenor!.HitPoints})");
     Console.WriteLine("Which action do you want to use to attack?");
-    foreach (var monsterAction in goblin!.Actions)
+    foreach (var monsterAction in monster!.Actions)
     {
         Console.WriteLine(monsterAction.Name);
     }
     string attackOption = Console.ReadLine()!;
-    goblin.DealingDamage(bruenor, attackOption);
+    monster.AttackAction(bruenor, attackOption);
 }
 
 #endregion

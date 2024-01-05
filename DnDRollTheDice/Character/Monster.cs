@@ -36,11 +36,25 @@ internal class Monster : Character
         int diceRolled = Roll.DiceRoll(1, 20);
 
         int attackValue = diceRolled + SelectMonsterAction(actionName)!.AttackBonus;
+        Console.WriteLine($"Attack Roll = Dice({diceRolled}) + Attack Bonus({SelectMonsterAction(actionName)!.AttackBonus}) = {attackValue}");
         return attackValue;
+    }
+
+    public void AttackAction(Character character, string actionName)
+    {
+        if(actionName == "Multiattack")
+        {
+            MultiAttack(character);
+        }
+        else
+        {
+            DealingDamage(character, actionName);
+        }
     }
 
     public void DealingDamage(Character character, string actionName)
     {
+        Console.WriteLine($"Making a {actionName} attack against {character.Name}!");
         int attackRoll = AttackRoll(actionName);
         if (ReachArmorClass(character, attackRoll))
         {
@@ -52,6 +66,28 @@ internal class Monster : Character
         }
         else
             Console.WriteLine("Attack missed!");
+    }
+
+    public void MultiAttack(Character character)
+    {
+        int numberOfAttacks = 0;
+        List<MultiAttackActions> multiAttackActions = Actions.Find(act => act.Name == "Multiattack")!.MultiAttackActions;
+        foreach (var action in Actions)
+        {
+            if (action.Name == "Multiattack") continue;
+            
+            MultiAttackActions multiAttackInformation = multiAttackActions.Find(multiAct => multiAct.MultiAttackActionName == action.Name)!;
+
+            if (multiAttackInformation == null) continue;
+
+            Actions attackAction = SelectMonsterAction(multiAttackInformation!.MultiAttackActionName!);
+            numberOfAttacks = multiAttackInformation.MultiAttackCount;
+            while (numberOfAttacks > 0)
+            {
+                DealingDamage(character, attackAction.Name!);
+                numberOfAttacks--;
+            }
+        }
     }
 
     public void SettingAbilityScores()

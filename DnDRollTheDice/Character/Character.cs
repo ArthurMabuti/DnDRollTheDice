@@ -81,6 +81,7 @@ internal class Character
 
     public virtual void DealingDamage(Character character)
     {
+        Console.WriteLine($"Making a {Weapon.Name} attack against {character.Name}!");
         int attackRoll = AttackRoll();
         if (ReachArmorClass(character, attackRoll))
         {
