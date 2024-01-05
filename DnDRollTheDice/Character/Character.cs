@@ -17,7 +17,7 @@ internal class Character
         get => armorClass.First();
         set => armorClass = [value];
     }
-    public int Initiative { get; set; }
+    public int Initiative => InitiativeCheck();
     [JsonPropertyName("speed")]
     public Speed Speed { get; set; }
     public Dictionary<string, int> AbilityScores { get; set; }
@@ -38,12 +38,12 @@ internal class Character
         double modifier = (double)(abilityScore - 10) / 2;
         return (int)Math.Floor(modifier);
     }
-    public void InitiativeCheck()
+    public int InitiativeCheck()
     {
         int rollValue = Roll.DiceRoll(1, 20);
         int finalResult = rollValue + ModifierValue(AbilityScores["Dexterity"]);
-        Console.WriteLine($"The dice roll for initiative was {rollValue}");
-        Initiative = finalResult;
+        Console.WriteLine($"The dice roll from {Name} for initiative was {rollValue}");
+        return finalResult;
     }
     public void Interface()
     {
