@@ -2,21 +2,19 @@
 using DnDRollTheDice.Character;
 using DnDRollTheDice.Character.CharacterItems;
 using DnDRollTheDice.Services;
+using System.Xml.Linq;
 
 #region Testing Character Status
 
-//Testing Modifier Value
 PlayerCharacter bruenor = new()
 {
     Name = "Bruenor",
     Class = "Fighter",
     Proficiency = 2,
-    HitPoints = 16
+    HitPoints = 20
 };
 bruenor.ArmorClass = new ArmorClass() { Type = "Armor", Value = 18, Armor = new List<Armor>() };
 bruenor.CharacterWithRandomAbilityScore();
-
-bruenor.Interface();
 
 //Testing Dice Roll
 //Fireball
@@ -35,7 +33,8 @@ ApiService apiService = new();
 
 #region Testing Monster API
 
-Monster? monster = await apiService.GetMonsterFromApiAsync("griffon");
+Monster? monster1 = await apiService.GetMonsterFromApiAsync("goblin");
+Monster? monster2 = await apiService.GetMonsterFromApiAsync("kobold");
 
 //Monster? monster = new();
 //monster.UseManualStatus();
@@ -53,19 +52,27 @@ bruenor.Weapon = greatsword!;
 
 #region Testing Combat System
 
-while(bruenor!.HitPoints > 0 && monster!.HitPoints > 0)
-{
-    Console.WriteLine($"{bruenor.Name} attacks {monster.Name}");
-    Console.WriteLine($"{monster.Name} HP({monster.HitPoints})");
-    bruenor.DealingDamage(monster);
-    Console.WriteLine($"{bruenor.Name} HP({bruenor!.HitPoints})");
-    Console.WriteLine("Which action do you want to use to attack?");
-    foreach (var monsterAction in monster!.Actions)
-    {
-        Console.WriteLine(monsterAction.Name);
-    }
-    string attackOption = Console.ReadLine()!;
-    monster.AttackAction(bruenor, attackOption);
-}
+//while(bruenor!.HitPoints > 0 && monster!.HitPoints > 0)
+//{
+//    Console.WriteLine($"{bruenor.Name} attacks {monster.Name}");
+//    Console.WriteLine($"{monster.Name} HP({monster.HitPoints})");
+//    bruenor.DealingDamage(monster);
+//    Console.WriteLine($"{bruenor.Name} HP({bruenor!.HitPoints})");
+//    Console.WriteLine("Which action do you want to use to attack?");
+//    foreach (var monsterAction in monster!.Actions)
+//    {
+//        Console.WriteLine(monsterAction.Name);
+//    }
+//    string attackOption = Console.ReadLine()!;
+//    monster.AttackAction(bruenor, attackOption);
+//    Console.ReadKey();
+//    Console.Clear();
+//}
+
+#endregion
+
+#region Testing Initiative Order
+
+CombatSystem.EngageInBattle();
 
 #endregion

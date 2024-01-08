@@ -40,16 +40,30 @@ internal class Monster : Character
         return attackValue;
     }
 
-    public void AttackAction(Character character, string actionName)
+    public void AttackAction<T>(List<T> allCharacters) where T : Character
     {
-        if(actionName == "Multiattack")
+        Character target = ChoosingTarget(allCharacters);
+        string attackOption = ChoosingAction();
+
+        if (attackOption == "Multiattack")
         {
-            MultiAttack(character);
+            MultiAttack(target);
         }
         else
         {
-            DealingDamage(character, actionName);
+            DealingDamage(target, attackOption);
         }
+    }
+
+    public string ChoosingAction()
+    {
+        foreach (var monsterAction in Actions!)
+        {
+            Console.WriteLine(monsterAction.Name);
+        }
+        string attackOption = Console.ReadLine()!;
+
+        return attackOption;
     }
 
     public void DealingDamage(Character character, string actionName)
@@ -63,6 +77,7 @@ internal class Monster : Character
             Console.WriteLine($"Damage = {damage}");
             character.HitPoints -= damage;
             Console.WriteLine($"Actual HP from {character.Name} = {character.HitPoints}");
+            SetUnconscious(character);
         }
         else
             Console.WriteLine("Attack missed!");

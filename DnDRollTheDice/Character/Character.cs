@@ -17,13 +17,14 @@ internal class Character
         get => armorClass.First();
         set => armorClass = [value];
     }
-    public int Initiative { get; set; }
+    public int Initiative => InitiativeCheck();
     [JsonPropertyName("speed")]
     public Speed Speed { get; set; }
     public Dictionary<string, int> AbilityScores { get; set; }
     [JsonPropertyName("proficiency_bonus")]
     public int Proficiency { get; set; }
     public Weapon Weapon { get; set; }
+    public bool Unconscious = false;
 
     public Character()
     {
@@ -31,6 +32,7 @@ internal class Character
         Speed = new();
         Weapon = new();
         armorClass = [];
+        CombatSystem.AddCharacter(this);
     }
 
     public static int ModifierValue(int abilityScore)
@@ -38,12 +40,12 @@ internal class Character
         double modifier = (double)(abilityScore - 10) / 2;
         return (int)Math.Floor(modifier);
     }
-    public void InitiativeCheck()
+    public int InitiativeCheck()
     {
         int rollValue = Roll.DiceRoll(1, 20);
         int finalResult = rollValue + ModifierValue(AbilityScores["Dexterity"]);
-        Console.WriteLine($"The dice roll for initiative was {rollValue}");
-        Initiative = finalResult;
+        Console.WriteLine($"The dice roll from {Name} for initiative was {rollValue}");
+        return finalResult;
     }
     public void Interface()
     {
@@ -79,20 +81,37 @@ internal class Character
         return false;
     }
 
-    public virtual void DealingDamage(Character character)
+    public virtual void DealingDamage<T>(List<T> allCharacters) where T : Character
     {
-        Console.WriteLine($"Making a {Weapon.Name} attack against {character.Name}!");
+        Character target = ChoosingTarget(allCharacters);
+        Console.WriteLine($"Making a {Weapon.Name} attack against {target.Name}!");
         int attackRoll = AttackRoll();
-        if (ReachArmorClass(character, attackRoll))
+        if (ReachArmorClass(target, attackRoll))
         {
             Console.WriteLine("Attack successful!");
             int damage = Weapon.Damage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill());
             Console.WriteLine($"Damage = {damage}");
-            character.HitPoints -= damage;
-            Console.WriteLine($"Actual HP from {character.Name} = {character.HitPoints}");
+            target.HitPoints -= damage;
+            Console.WriteLine($"Actual HP from {target.Name} = {target.HitPoints}");
+            SetUnconscious(target);
         }
         else
             Console.WriteLine("Attack missed!");
+    }
+
+    public T ChoosingTarget<T>(List<T> allCharacters) where T : Character
+    {
+        Console.WriteLine($"** {Name}' turn **");
+        T target = null!;
+        Console.WriteLine("Which target do you want to attack?");
+        foreach (Character character in allCharacters)
+        {
+            if(!character.IsUnconscious())
+                Console.WriteLine(character.Name);
+        }
+        string targetName = Console.ReadLine()!;
+        target = allCharacters.Find(cha => cha.Name == targetName)!;
+        return target;
     }
 
     public bool CriticalHit(int attackRoll)
@@ -108,5 +127,14 @@ internal class Character
     {
         int fightingSkill = (AbilityScores["Strength"] > AbilityScores["Dexterity"]) ? AbilityScores["Strength"] : AbilityScores["Dexterity"];
         return fightingSkill;
+    }
+
+    public void SetUnconscious(Character character)
+    {
+        if(character.HitPoints <= 0) character.Unconscious = true;
+    }
+    public bool IsUnconscious()
+    {
+        return Unconscious;
     }
 }
