@@ -57,6 +57,7 @@ internal class Monster : Character
 
     public string ChoosingAction()
     {
+        Console.WriteLine("Which action do you want to use to attack?");
         foreach (var monsterAction in Actions!)
         {
             Console.WriteLine(monsterAction.Name);
