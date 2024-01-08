@@ -31,6 +31,7 @@ internal class Character
         Speed = new();
         Weapon = new();
         armorClass = [];
+        CombatSystem.AddCharacter(this);
     }
 
     public static int ModifierValue(int abilityScore)
