@@ -1,4 +1,5 @@
-﻿using CharacterType = DnDRollTheDice.Character.Character;
+﻿using DnDRollTheDice.Character;
+using CharacterType = DnDRollTheDice.Character.Character;
 
 namespace DnDRollTheDice;
 internal class CombatSystem
