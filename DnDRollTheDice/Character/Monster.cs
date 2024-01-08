@@ -77,6 +77,7 @@ internal class Monster : Character
             Console.WriteLine($"Damage = {damage}");
             character.HitPoints -= damage;
             Console.WriteLine($"Actual HP from {character.Name} = {character.HitPoints}");
+            SetUnconscious(character);
         }
         else
             Console.WriteLine("Attack missed!");
