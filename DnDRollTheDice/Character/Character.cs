@@ -112,7 +112,7 @@ internal class Character
         return fightingSkill;
     }
 
-    public void GetUnconscious(Character character)
+    public void SetUnconscious(Character character)
     {
         if(character.HitPoints <= 0) character.Unconscious = true;
     }
