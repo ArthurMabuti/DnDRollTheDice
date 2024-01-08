@@ -116,4 +116,8 @@ internal class Character
     {
         if(character.HitPoints <= 0) character.Unconscious = true;
     }
+    public bool IsUnconscious()
+    {
+        return Unconscious;
+    }
 }
