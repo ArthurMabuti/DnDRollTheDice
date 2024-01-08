@@ -97,6 +97,21 @@ internal class Character
             Console.WriteLine("Attack missed!");
     }
 
+    public T ChoosingTarget<T>(List<T> allCharacters) where T : Character
+    {
+        Console.WriteLine($"** {Name}' turn **");
+        T target = null!;
+        Console.WriteLine("Which target do you want to attack?");
+        foreach (Character character in allCharacters)
+        {
+            if(!character.IsUnconscious())
+                Console.WriteLine(character.Name);
+        }
+        string targetName = Console.ReadLine()!;
+        target = allCharacters.Find(cha => cha.Name == targetName)!;
+        return target;
+    }
+
     public bool CriticalHit(int attackRoll)
     {
         int attackDiceRoll = attackRoll - ModifierValue(BestFightingSkill()) - Proficiency;
