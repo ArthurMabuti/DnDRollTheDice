@@ -49,7 +49,15 @@ internal class Monster : Character
         else
         {
             DealingDamage(character, actionName);
+    public string ChoosingAction()
+    {
+        foreach (var monsterAction in Actions!)
+        {
+            Console.WriteLine(monsterAction.Name);
         }
+        string attackOption = Console.ReadLine()!;
+
+        return attackOption;
     }
 
     public void DealingDamage(Character character, string actionName)
