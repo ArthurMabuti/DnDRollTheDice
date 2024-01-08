@@ -24,6 +24,7 @@ internal class Character
     [JsonPropertyName("proficiency_bonus")]
     public int Proficiency { get; set; }
     public Weapon Weapon { get; set; }
+    public bool Unconscious = false;
 
     public Character()
     {
@@ -109,5 +110,10 @@ internal class Character
     {
         int fightingSkill = (AbilityScores["Strength"] > AbilityScores["Dexterity"]) ? AbilityScores["Strength"] : AbilityScores["Dexterity"];
         return fightingSkill;
+    }
+
+    public void GetUnconscious(Character character)
+    {
+        if(character.HitPoints <= 0) character.Unconscious = true;
     }
 }
