@@ -81,17 +81,19 @@ internal class Character
         return false;
     }
 
-    public virtual void DealingDamage(Character character)
+    public virtual void DealingDamage<T>(List<T> allCharacters) where T : Character
     {
-        Console.WriteLine($"Making a {Weapon.Name} attack against {character.Name}!");
+        Character target = ChoosingTarget(allCharacters);
+        Console.WriteLine($"Making a {Weapon.Name} attack against {target.Name}!");
         int attackRoll = AttackRoll();
-        if (ReachArmorClass(character, attackRoll))
+        if (ReachArmorClass(target, attackRoll))
         {
             Console.WriteLine("Attack successful!");
             int damage = Weapon.Damage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill());
             Console.WriteLine($"Damage = {damage}");
-            character.HitPoints -= damage;
-            Console.WriteLine($"Actual HP from {character.Name} = {character.HitPoints}");
+            target.HitPoints -= damage;
+            Console.WriteLine($"Actual HP from {target.Name} = {target.HitPoints}");
+            SetUnconscious(target);
         }
         else
             Console.WriteLine("Attack missed!");
