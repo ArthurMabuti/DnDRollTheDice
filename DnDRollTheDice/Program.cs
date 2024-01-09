@@ -69,10 +69,6 @@ bruenor.Weapon = greatsword!;
 //    Console.Clear();
 //}
 
-#endregion
-
-#region Testing Initiative Order
-
 CombatSystem.EngageInBattle();
 
 #endregion
