@@ -83,7 +83,7 @@ internal class Character
 
     public virtual void DealingDamage<T>(List<T> allCharacters) where T : Character
     {
-        Character target = ChoosingTarget(allCharacters);
+        Character target = ChooseTarget(allCharacters);
         Console.WriteLine($"Making a {Weapon.Name} attack against {target.Name}!");
         int attackRoll = AttackRoll();
         if (ReachArmorClass(target, attackRoll))
@@ -99,7 +99,7 @@ internal class Character
             Console.WriteLine("Attack missed!");
     }
 
-    public T ChoosingTarget<T>(List<T> allCharacters) where T : Character
+    public T ChooseTarget<T>(List<T> allCharacters) where T : Character
     {
         Console.WriteLine($"** {Name}' turn **");
         T target = null!;
