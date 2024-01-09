@@ -42,8 +42,8 @@ internal class Monster : Character
 
     public void AttackAction<T>(List<T> allCharacters) where T : Character
     {
-        Character target = ChoosingTarget(allCharacters);
-        string attackOption = ChoosingAction();
+        Character target = ChooseTarget(allCharacters);
+        string attackOption = ChooseAction();
 
         if (attackOption == "Multiattack")
         {
@@ -55,7 +55,7 @@ internal class Monster : Character
         }
     }
 
-    public string ChoosingAction()
+    public string ChooseAction()
     {
         Console.WriteLine("Which action do you want to use to attack?");
         foreach (var monsterAction in Actions!)
