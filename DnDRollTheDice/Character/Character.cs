@@ -1,5 +1,6 @@
 ﻿using DnDRollTheDice.Character.CharacterDetails;
 using DnDRollTheDice.Character.CharacterItems;
+using DnDRollTheDice.Character.CharacterSpells;
 using System.Text.Json.Serialization;
 
 namespace DnDRollTheDice.Character;
@@ -40,6 +41,7 @@ internal class Character
         double modifier = (double)(abilityScore - 10) / 2;
         return (int)Math.Floor(modifier);
     }
+
     public int InitiativeCheck()
     {
         int rollValue = Roll.DiceRoll(1, 20);
@@ -47,11 +49,13 @@ internal class Character
         Console.WriteLine($"The dice roll from {Name} for initiative was {rollValue}");
         return finalResult;
     }
+
     public void Interface()
     {
         Console.WriteLine($@"{Name} CA: {ArmorClass.Value}");
         ShowAbilityScores();
     }
+
     public void ShowAbilityScores()
     {
         Dictionary<string, int> abilityScore = AbilityScores;
@@ -61,6 +65,7 @@ internal class Character
             Console.WriteLine($"{abilityNameAbbreviated}: {abilityScore[abilityName]} | {ModifierValue(abilityScore[abilityName])}");
         }
     }
+
     public int AttackRoll()
     {
         int rangeSkillBased = (this.Weapon.Range == "Ranged") ? ModifierValue(AbilityScores["Dexterity"]) : ModifierValue(BestFightingSkill());
@@ -72,6 +77,7 @@ internal class Character
         Console.WriteLine($"Attack Roll = Dice({diceRolled}) + Skill Bonus({rangeSkillBased}) + Proficiency Bonus({Proficiency}) = {attackValue}");
         return attackValue;
     }
+
     public static bool ReachArmorClass(Character character, int attackRoll)
     {
         if (attackRoll >= character.ArmorClass.Value)
@@ -81,22 +87,32 @@ internal class Character
         return false;
     }
 
-    public virtual void DealingDamage<T>(List<T> allCharacters) where T : Character
+    public void DealingDamage<T>(List<T> allCharacters, Spells? spell = null) where T : Character
     {
         Character target = ChooseTarget(allCharacters);
-        Console.WriteLine($"Making a {Weapon.Name} attack against {target.Name}!");
+        string? attackSource = (spell == null) ? Weapon.Name : spell.Name;
+
+        Console.WriteLine($"Making a {attackSource} attack against {target.Name}!");
+
         int attackRoll = AttackRoll();
+
         if (ReachArmorClass(target, attackRoll))
         {
             Console.WriteLine("Attack successful!");
-            int damage = Weapon.Damage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill());
+
+            int damage = (spell == null)
+                ? Weapon.Damage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill())
+                : spell.SpellDamage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill());
+
             Console.WriteLine($"Damage = {damage}");
             target.HitPoints -= damage;
             Console.WriteLine($"Actual HP from {target.Name} = {target.HitPoints}");
             SetUnconscious(target);
         }
         else
+        {
             Console.WriteLine("Attack missed!");
+        }
     }
 
     public T ChooseTarget<T>(List<T> allCharacters) where T : Character
@@ -133,6 +149,7 @@ internal class Character
     {
         if(character.HitPoints <= 0) character.Unconscious = true;
     }
+
     public bool IsUnconscious()
     {
         return Unconscious;
