@@ -13,6 +13,11 @@ internal class PlayerCharacter : Character
         CreatingAbilityScores();
     }
 
+    public void ActionList()
+    {
+        Console.WriteLine("Weapon Attack");
+        Console.WriteLine("Spell Casting");
+    }
     private void CreatingAbilityScores()
     {
         string[] abilityNames = { "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma" };
