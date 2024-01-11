@@ -1,20 +1,19 @@
-﻿using DnDRollTheDice;
-using DnDRollTheDice.Character;
+﻿using DnDRollTheDice.Character;
 using DnDRollTheDice.Character.CharacterItems;
+using DnDRollTheDice.Character.CharacterSpells;
 using DnDRollTheDice.Services;
-using System.Xml.Linq;
 
 #region Testing Character Status
 
-PlayerCharacter bruenor = new()
+PlayerCharacter brocc = new()
 {
-    Name = "Bruenor",
-    Class = "Fighter",
+    Name = "Brocc",
+    Class = "Wizard",
     Proficiency = 2,
-    HitPoints = 20
+    HitPoints = 10
 };
-bruenor.ArmorClass = new ArmorClass() { Type = "Armor", Value = 18, Armor = new List<Armor>() };
-bruenor.CharacterWithRandomAbilityScore();
+brocc.ArmorClass = new ArmorClass() { Type = "Armor", Value = 18, Armor = new List<Armor>() };
+brocc.CharacterWithRandomAbilityScore();
 
 //Testing Dice Roll
 //Fireball
@@ -44,8 +43,8 @@ Monster? monster2 = await apiService.GetMonsterFromApiAsync("kobold");
 
 #region Testing Weapon API
 
-Weapon? greatsword = await apiService.GetWeaponFromApiAsync("greatsword");
-bruenor.Weapon = greatsword!;
+Weapon? quarterstaff = await apiService.GetWeaponFromApiAsync("quarterstaff");
+brocc.Weapon = quarterstaff!;
 //Console.WriteLine(bruenor.ReachArmorClass(monster!));
 
 #endregion
@@ -69,6 +68,24 @@ bruenor.Weapon = greatsword!;
 //    Console.Clear();
 //}
 
-CombatSystem.EngageInBattle();
+//CombatSystem.EngageInBattle();
+
+#endregion
+
+#region Testing Other API
+
+//SpellList? listOfSpells = await apiService.GetSpellListFromApiAsync(0, brocc.Class);
+
+//foreach (var spell in listOfSpells!.Spells!)
+//{
+//    Console.WriteLine(spell.Name);
+//    if(spell.SpellDamage != null) Console.WriteLine(spell.SpellDamage);
+//}
+
+#endregion
+
+#region Testing Spell Attack
+
+await brocc.ChooseActionAsync();
 
 #endregion
