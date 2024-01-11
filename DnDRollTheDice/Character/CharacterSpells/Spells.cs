@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using DnDRollTheDice.Character.CharacterDetails;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace DnDRollTheDice.Character.CharacterSpells;
@@ -20,7 +21,7 @@ internal class Spells
     public string? School { get; set; }
     [JsonPropertyName("requires_concentration")]
     public bool Concentration { get; set; }
-    public string? SpellDamage => SpellDamageByDescription();
+    public Damage? SpellDamage => SpellDamageByDescription();
     //Components
     [JsonPropertyName("requires_verbal_components")]
     public bool Verbal { get; set; }
@@ -29,12 +30,14 @@ internal class Spells
     [JsonPropertyName("requires_material_components")]
     public bool Material { get; set; }
 
-    public string SpellDamageByDescription()
+    public Damage SpellDamageByDescription()
     {
+        Damage damage = new();
         Match match = DescriptionHasDamageDice(Description!);
         if (match.Success)
         {
-            return match.Value;
+            damage.DamageDice = match.Value;
+            return damage;
         }
         return null!;
     }
