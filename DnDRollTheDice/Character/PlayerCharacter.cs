@@ -27,6 +27,16 @@ Level 1
 Level 2
 Level 3");
     }
+    public async Task GetSpells(int level)
+    {
+        ApiService api = new ApiService();
+        SpellList? spellList = await api.GetSpellListFromApiAsync(0, Class!);
+        foreach(var spell in spellList!.Spells!)
+        {
+            KnownSpells.Add(spell);
+        }
+    }
+
     private void CreatingAbilityScores()
     {
         string[] abilityNames = { "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma" };
