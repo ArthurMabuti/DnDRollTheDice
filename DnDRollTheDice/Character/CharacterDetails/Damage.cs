@@ -27,4 +27,9 @@ public class Damage
         int rollValue = Roll.DiceRoll(numberOfDices, diceSides);
         return rollValue + attackBonus;
     }
+
+    public override string ToString()
+    {
+        return DamageDice!;
+    }
 }
