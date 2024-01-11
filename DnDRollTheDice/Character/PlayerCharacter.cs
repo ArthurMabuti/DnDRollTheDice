@@ -18,6 +18,15 @@ internal class PlayerCharacter : Character
         Console.WriteLine("Weapon Attack");
         Console.WriteLine("Spell Casting");
     }
+
+    public void SpellsLevelList()
+    {
+        Console.WriteLine(@"Choose a spell level:
+Cantrip
+Level 1
+Level 2
+Level 3");
+    }
     private void CreatingAbilityScores()
     {
         string[] abilityNames = { "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma" };
