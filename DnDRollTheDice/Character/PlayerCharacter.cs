@@ -1,5 +1,5 @@
 ﻿using DnDRollTheDice.Character.CharacterSpells;
-using DnDRollTheDice.Character.CharacterItems;
+using DnDRollTheDice.Services;
 
 namespace DnDRollTheDice.Character;
 
@@ -11,6 +11,35 @@ internal class PlayerCharacter : Character
     {
         KnownSpells = [];
         CreatingAbilityScores();
+    }
+
+    public async Task ChooseActionAsync()
+    {
+        Console.WriteLine("Which action do you want to use to attack?");
+        ActionList();
+        string option = Console.ReadLine()!.ToLower();
+        switch (option)
+        {
+            case "weapon attack":
+                DealingDamage(CombatSystem.AllCharacters, null);
+                break;
+            case "spell casting":
+                SpellsLevelList();
+                string spellLevel = Console.ReadLine()!.ToLower();
+                if (spellLevel == "cantrip") spellLevel = "0";
+                if (int.TryParse(spellLevel, out int level))
+                {
+                    await ShowListOfSpells(level);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid spell level. Please enter a valid number.");
+                }
+                break;
+            default:
+                Console.WriteLine("That isn't an option");
+                break;
+        }
     }
 
     public void ActionList()
