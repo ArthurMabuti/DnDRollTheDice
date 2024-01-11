@@ -20,7 +20,7 @@ internal class Spells
     public string? School { get; set; }
     [JsonPropertyName("requires_concentration")]
     public bool Concentration { get; set; }
-    public string? SpellDamage { get; set; }
+    public string? SpellDamage => SpellDamageByDescription();
     //Components
     [JsonPropertyName("requires_verbal_components")]
     public bool Verbal { get; set; }
@@ -28,6 +28,16 @@ internal class Spells
     public bool Somatic { get; set; }
     [JsonPropertyName("requires_material_components")]
     public bool Material { get; set; }
+
+    public string SpellDamageByDescription()
+    {
+        Match match = DescriptionHasDamageDice(Description!);
+        if (match.Success)
+        {
+            return match.Value;
+        }
+        return null!;
+    }
 
     public Match DescriptionHasDamageDice(string description)
     {
