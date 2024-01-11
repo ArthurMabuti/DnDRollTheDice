@@ -29,5 +29,9 @@ internal class Spells
     [JsonPropertyName("requires_material_components")]
     public bool Material { get; set; }
 
-
+    public Match DescriptionHasDamageDice(string description)
+    {
+        Match match = Regex.Match(description, @"(\d{2}|\d{1})d(\d{2}|\d{1})");
+        return match;
+    }
 }
