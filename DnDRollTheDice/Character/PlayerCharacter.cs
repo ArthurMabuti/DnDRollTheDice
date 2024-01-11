@@ -27,6 +27,20 @@ Level 1
 Level 2
 Level 3");
     }
+
+    public async Task ShowListOfSpells(int level)
+    {
+        await GetSpells(level);
+        Console.WriteLine("Which spell do you want to use?");
+        foreach (var spell in KnownSpells!)
+        {
+            Console.WriteLine(spell.Name);
+        }
+        string spellName = Console.ReadLine()!.ToLower();
+        Spells chosenSpell = KnownSpells.Find(spl => spl.Name!.ToLower() == spellName)!;
+        DealingDamage(CombatSystem.AllCharacters, chosenSpell);
+    }
+
     public async Task GetSpells(int level)
     {
         ApiService api = new ApiService();
