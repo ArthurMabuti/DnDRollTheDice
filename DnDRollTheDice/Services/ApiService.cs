@@ -1,5 +1,6 @@
 ﻿using DnDRollTheDice.Character;
 using DnDRollTheDice.Character.CharacterItems;
+using DnDRollTheDice.Character.CharacterSpells;
 using System.Text.Json;
 
 namespace DnDRollTheDice.Services;
