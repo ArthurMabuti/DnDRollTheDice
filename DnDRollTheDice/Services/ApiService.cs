@@ -25,4 +25,14 @@ internal class ApiService
             return newWeapon;
         }
     }
+
+    public async Task<SpellList?> GetSpellListFromApiAsync(int level, string characterClass)
+    {
+        using (HttpClient client = new HttpClient())
+        {
+            string answer = await client.GetStringAsync($"https://api.open5e.com/v1/spells/?document__slug=wotc-srd&spell_level={level}&spell_lists={characterClass.ToLower()}");
+            SpellList? spellList = JsonSerializer.Deserialize<SpellList>(answer);
+            return spellList;
+        }
+    }
 }
