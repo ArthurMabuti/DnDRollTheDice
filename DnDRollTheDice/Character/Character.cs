@@ -158,4 +158,13 @@ internal class Character
     {
         return Unconscious;
     }
+
+    public async Task AssignClassInformationAsync(ApiService apiService)
+    {
+        if (Class != null)
+        {
+            ClassList classList = await apiService.GetClassFromApiAsync(Class);
+            ClassInformation = classList?.Class?.First();
+        }
+    }
 }
