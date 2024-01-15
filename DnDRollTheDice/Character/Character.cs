@@ -70,15 +70,17 @@ internal class Character
         }
     }
 
-    public int AttackRoll()
+    public int AttackRoll(Spells? spell = null)
     {
-        int rangeSkillBased = (this.Weapon.Range == "Ranged") ? ModifierValue(AbilityScores["Dexterity"]) : ModifierValue(BestFightingSkill());
-
         int diceRolled = Roll.DiceRoll(1, 20);
 
-        int attackValue = diceRolled + rangeSkillBased + Proficiency;
+        int rangeSkillBased = (Weapon.Range == "Ranged") ? ModifierValue(AbilityScores["Dexterity"]) : ModifierValue(BestFightingSkill());
 
-        Console.WriteLine($"Attack Roll = Dice({diceRolled}) + Skill Bonus({rangeSkillBased}) + Proficiency Bonus({Proficiency}) = {attackValue}");
+        int attackBonus = (spell != null) ? ModifierValue(AbilityScores[ClassInformation!.SpellCastingAbility!]) : rangeSkillBased;
+
+        int attackValue = diceRolled + attackBonus + Proficiency;
+
+        Console.WriteLine($"Attack Roll = Dice({diceRolled}) + Skill Bonus({attackBonus}) + Proficiency Bonus({Proficiency}) = {attackValue}");
         return attackValue;
     }
 
