@@ -26,6 +26,9 @@ internal class Character
     public int Proficiency { get; set; }
     public Weapon Weapon { get; set; }
     public bool Unconscious = false;
+    public string? Class { get; set; }
+    public Class? ClassInformation { get; set; }
+    public List<Spells> KnownSpells { get; set; }
 
     public Character()
     {
@@ -33,6 +36,7 @@ internal class Character
         Speed = new();
         Weapon = new();
         armorClass = [];
+        KnownSpells = [];
         CombatSystem.AddCharacter(this);
     }
 
