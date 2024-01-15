@@ -19,24 +19,23 @@ internal class ApiService
             return JsonSerializer.Deserialize<T>(answer);
         }
     }
+
+    public async Task<Monster?> GetMonsterFromApiAsync(string monster)
+    {
+        Monster? newMonster = await GetEntityFromApiAsync<Monster>(Dnd5eApiBaseUrl, $"monsters/{monster}");
             newMonster?.SettingAbilityScores();
             return newMonster;
         }
-    }
 
     public async Task<Weapon?> GetWeaponFromApiAsync(string weapon)
     {
-        using (HttpClient client = new HttpClient())
-        {
-            string answer = await client.GetStringAsync($"https://www.dnd5eapi.co/api/equipment/{weapon}/");
-            Weapon? newWeapon = JsonSerializer.Deserialize<Weapon>(answer);
-            return newWeapon;
+        return await GetEntityFromApiAsync<Weapon>(Dnd5eApiBaseUrl, $"equipment/{weapon}");
         }
-    }
 
     public async Task<SpellList?> GetSpellListFromApiAsync(int level, string characterClass)
     {
-        using (HttpClient client = new HttpClient())
+        return await GetEntityFromApiAsync<SpellList>(Open5eApiBaseUrl, $"spells/?document__slug=wotc-srd&spell_level={level}&spell_lists={characterClass.ToLower()}");
+    }
         {
             string answer = await client.GetStringAsync($"https://api.open5e.com/v1/spells/?document__slug=wotc-srd&spell_level={level}&spell_lists={characterClass.ToLower()}");
             SpellList? spellList = JsonSerializer.Deserialize<SpellList>(answer);
