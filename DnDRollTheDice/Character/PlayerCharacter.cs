@@ -39,13 +39,13 @@ internal class PlayerCharacter : Character
         }
     }
 
-    public void ActionList()
+    private void ActionList()
     {
         Console.WriteLine("Weapon Attack");
         Console.WriteLine("Spell Casting");
     }
 
-    public void SpellsLevelList()
+    private void SpellsLevelList()
     {
         Console.WriteLine(@"Choose a spell level:
 Cantrip
@@ -54,7 +54,7 @@ Level 2
 Level 3");
     }
 
-    public async Task ShowListOfSpells(int level)
+    private async Task ShowListOfSpells(int level)
     {
         await GetSpells(level);
         Console.WriteLine("Which spell do you want to use?");
@@ -67,10 +67,10 @@ Level 3");
         DealingDamage(CombatSystem.AllCharacters, chosenSpell);
     }
 
-    public async Task GetSpells(int level)
+    private async Task GetSpells(int level)
     {
         ApiService api = new ApiService();
-        SpellList? spellList = await api.GetSpellListFromApiAsync(0, Class!);
+        SpellList? spellList = await api.GetSpellListFromApiAsync(level, ClassInformation!.Name!);
         foreach(var spell in spellList!.Spells!)
         {
             KnownSpells.Add(spell);
@@ -87,7 +87,7 @@ Level 3");
         }
     }
 
-    public int GenerateRandomAbilityScore()
+    private int GenerateRandomAbilityScore()
     {
         //Roll 4 6-sized dice
         List<int> rollsResult = new();
