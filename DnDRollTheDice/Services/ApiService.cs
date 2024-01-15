@@ -1,8 +1,8 @@
-﻿using DnDRollTheDice.Character;
-using DnDRollTheDice.Character.CharacterItems;
+﻿using DnDRollTheDice.Character.CharacterItems;
 using DnDRollTheDice.Character.CharacterSpells;
 using DnDRollTheDice.Character;
 using System.Text.Json;
+using DnDRollTheDice.Character.CharacterClass;
 
 namespace DnDRollTheDice.Services;
 internal class ApiService
@@ -23,23 +23,22 @@ internal class ApiService
     public async Task<Monster?> GetMonsterFromApiAsync(string monster)
     {
         Monster? newMonster = await GetEntityFromApiAsync<Monster>(Dnd5eApiBaseUrl, $"monsters/{monster}");
-            newMonster?.SettingAbilityScores();
-            return newMonster;
-        }
+        newMonster?.SettingAbilityScores();
+        return newMonster;
+    }
 
     public async Task<Weapon?> GetWeaponFromApiAsync(string weapon)
     {
         return await GetEntityFromApiAsync<Weapon>(Dnd5eApiBaseUrl, $"equipment/{weapon}");
-        }
+    }
 
     public async Task<SpellList?> GetSpellListFromApiAsync(int level, string characterClass)
     {
         return await GetEntityFromApiAsync<SpellList>(Open5eApiBaseUrl, $"spells/?document__slug=wotc-srd&spell_level={level}&spell_lists={characterClass.ToLower()}");
     }
-        {
-            string answer = await client.GetStringAsync($"https://api.open5e.com/v1/spells/?document__slug=wotc-srd&spell_level={level}&spell_lists={characterClass.ToLower()}");
-            SpellList? spellList = JsonSerializer.Deserialize<SpellList>(answer);
-            return spellList;
-        }
+
+    public async Task<ClassList?> GetClassFromApiAsync(string characterClass)
+    {
+        return await GetEntityFromApiAsync<ClassList>(Open5eApiBaseUrl, $"classes/?slug__in={characterClass.ToLower()}");
     }
 }
