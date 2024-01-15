@@ -98,9 +98,9 @@ internal class Character
         Character target = ChooseTarget(allCharacters);
         string? attackSource = (spell == null) ? Weapon.Name : spell.Name;
 
-        Console.WriteLine($"Making a {attackSource} attack against {target.Name}!");
+        Console.WriteLine($"Making a {attackSource} attack against {target.Name!}!");
 
-        int attackRoll = AttackRoll();
+        int attackRoll = AttackRoll(spell);
 
         if (ReachArmorClass(target, attackRoll))
         {
