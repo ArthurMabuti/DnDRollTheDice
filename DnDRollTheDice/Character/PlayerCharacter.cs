@@ -5,11 +5,8 @@ namespace DnDRollTheDice.Character;
 
 internal class PlayerCharacter : Character
 {
-    public string? Class { get; set; }
-    public List<Spells> KnownSpells { get; set; }
     public PlayerCharacter()
     {
-        KnownSpells = [];
         CreatingAbilityScores();
     }
 
