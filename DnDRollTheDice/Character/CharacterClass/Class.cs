@@ -10,6 +10,9 @@ internal class Class
     public string? Description { get; set; }
     [JsonPropertyName("hit_dice")]
     public string? HitPointsDice { get; set; }
+    [JsonPropertyName("prof_armor")]
+    private string? proficiencyArmors { get; set; }
+    public List<string>? ProficiencyArmors => FormatAndSplit(proficiencyArmors!);
     [JsonPropertyName("prof_weapons")]
     private string? proficiencyWeapons { get; set; }
     public List<string>? ProficiencyWeapons => FormatAndSplit(proficiencyWeapons!);
