@@ -19,6 +19,8 @@ internal class Monster : Character
     public int Charisma { get; set; }
     [JsonPropertyName("actions")]
     public List<Actions> Actions { get; set; }
+    [JsonPropertyName("type")]
+    public string? Type { get; set; }
 
     public Monster() : base()
     {
