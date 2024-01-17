@@ -55,7 +55,7 @@ Level 2
 Level 3");
     }
 
-    private async Task ShowListOfSpells(int level)
+    private async Task ShowListOfSpells<T>(int level, List<T> allCharacters) where T: Character
     {
         await GetSpells(level);
         Console.WriteLine("Which spell do you want to use?");
@@ -65,7 +65,7 @@ Level 3");
         }
         string spellName = Console.ReadLine()!.ToLower();
         Spells chosenSpell = KnownSpells.Find(spl => spl.Name!.ToLower() == spellName)!;
-        DealingDamage(CombatSystem.AllCharacters, chosenSpell);
+        DealingDamage(allCharacters, chosenSpell);
     }
 
     private async Task GetSpells(int level)
