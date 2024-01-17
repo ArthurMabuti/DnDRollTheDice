@@ -1,6 +1,8 @@
-﻿using DnDRollTheDice.Character.CharacterDetails;
+﻿using DnDRollTheDice.Character.CharacterClass;
+using DnDRollTheDice.Character.CharacterDetails;
 using DnDRollTheDice.Character.CharacterItems;
 using DnDRollTheDice.Character.CharacterSpells;
+using DnDRollTheDice.Services;
 using System.Text.Json.Serialization;
 
 namespace DnDRollTheDice.Character;
@@ -70,13 +72,27 @@ internal class Character
         }
     }
 
-    public int AttackRoll(Spells? spell = null)
+    public int AttackRoll(Character character, string? actionName = null, Spells? spell = null)
     {
         int diceRolled = Roll.DiceRoll(1, 20);
 
-        int rangeSkillBased = (Weapon.Range == "Ranged") ? ModifierValue(AbilityScores["Dexterity"]) : ModifierValue(BestFightingSkill());
+        int attackBonus;
+        int attackValue;
+        if(character is Monster monster)
+        {
+            attackBonus = monster.SelectMonsterAction(actionName!).AttackBonus;
+            attackValue = diceRolled + attackBonus;
+            Console.WriteLine($"Attack Roll = Dice({diceRolled}) + AttackBobus({attackBonus}) = {attackValue}");
+        }
+        else
+        {
+            attackBonus = AssignAttackBonus(spell);
+            attackValue = diceRolled + attackBonus + Proficiency;
+            Console.WriteLine($"Attack Roll = Dice({diceRolled}) + Skill Bonus({attackBonus}) + Proficiency Bonus({Proficiency}) = {attackValue}");
+        }
 
-        int attackBonus = (spell != null) ? ModifierValue(AbilityScores[ClassInformation!.SpellCastingAbility!]) : rangeSkillBased;
+        return attackValue;
+    }
 
     private int RangeSkillBased()
     {
