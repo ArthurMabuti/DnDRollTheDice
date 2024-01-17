@@ -10,15 +10,16 @@ internal class PlayerCharacter : Character
         CreatingAbilityScores();
     }
 
-    public async Task ChooseActionAsync()
+    public async Task ChooseActionAsync<T>(List<T> allCharacters) where T : Character
     {
+        Console.WriteLine($"** {Name}' turn **");
         Console.WriteLine("Which action do you want to use to attack?");
         ActionList();
         string option = Console.ReadLine()!.ToLower();
         switch (option)
         {
             case "weapon attack":
-                DealingDamage(CombatSystem.AllCharacters, null);
+                DealingDamage(allCharacters, null);
                 break;
             case "spell casting":
                 SpellsLevelList();
@@ -26,7 +27,7 @@ internal class PlayerCharacter : Character
                 if (spellLevel == "cantrip") spellLevel = "0";
                 if (int.TryParse(spellLevel, out int level))
                 {
-                    await ShowListOfSpells(level);
+                    await ShowListOfSpells(level, allCharacters);
                 }
                 else
                 {
