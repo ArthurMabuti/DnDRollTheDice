@@ -78,7 +78,11 @@ internal class Character
 
         int attackBonus = (spell != null) ? ModifierValue(AbilityScores[ClassInformation!.SpellCastingAbility!]) : rangeSkillBased;
 
-        int attackValue = diceRolled + attackBonus + Proficiency;
+    private int RangeSkillBased()
+    {
+        int rangeSkillBased = (Weapon.Range == "Ranged") ? ModifierValue(AbilityScores["Dexterity"]) : ModifierValue(BestFightingSkill());
+        return rangeSkillBased;
+    }
 
     private int AssignAttackBonus(Spells? spell)
     {
