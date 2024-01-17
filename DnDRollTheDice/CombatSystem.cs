@@ -18,20 +18,21 @@ internal class CombatSystem
 
         OrderCharactersByInitiative();
 
-        while (!allPlayerCharacters.All(cha => cha.IsUnconscious()) && !allMonsters.All(mon => mon.IsUnconscious()))
+        while (!allMonsters.All(mon => mon.IsUnconscious()) && !allPlayerCharacters.All(cha => cha.IsUnconscious()))
         {
             foreach (var character in AllCharacters)
             {
-                
                 if (character is PlayerCharacter playerCharacter)
                 {
+                    if (allMonsters.All(mon => mon.IsUnconscious())) break;
                     if (character.HitPoints <= 0) break;
-                    playerCharacter.DealingDamage(allMonsters);
+                    playerCharacter.ChooseActionAsync(allMonsters).Wait();
                     continue;
                 }
                 if (character is Monster monsterCharacter && monsterCharacter.HitPoints > 0)
                 {
-                    monsterCharacter.AttackAction(allPlayerCharacters);
+                    if(allPlayerCharacters.All(cha => cha.IsUnconscious())) break;
+                    monsterCharacter.DealingDamage(allPlayerCharacters);
                 }
             }
         }
