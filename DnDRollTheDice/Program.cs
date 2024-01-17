@@ -1,7 +1,9 @@
-﻿using DnDRollTheDice.Character;
+﻿using DnDRollTheDice;
+using DnDRollTheDice.Character;
 using DnDRollTheDice.Character.CharacterItems;
-using DnDRollTheDice.Character.CharacterSpells;
 using DnDRollTheDice.Services;
+
+ApiService apiService = new();
 
 #region Testing Character Status
 
@@ -12,6 +14,7 @@ PlayerCharacter brocc = new()
     Proficiency = 2,
     HitPoints = 10
 };
+await brocc.AssignClassInformationAsync(apiService);
 brocc.ArmorClass = new ArmorClass() { Type = "Armor", Value = 18, Armor = new List<Armor>() };
 brocc.CharacterWithRandomAbilityScore();
 
@@ -28,12 +31,10 @@ brocc.CharacterWithRandomAbilityScore();
 //bruenor.GenerateRandomAbilityScore();
 #endregion
 
-ApiService apiService = new();
-
 #region Testing Monster API
 
-Monster? monster1 = await apiService.GetMonsterFromApiAsync("goblin");
-Monster? monster2 = await apiService.GetMonsterFromApiAsync("kobold");
+Monster? monster1 = await apiService.GetMonsterFromApiAsync("griffon");
+Monster? monster2 = await apiService.GetMonsterFromApiAsync("hill-giant");
 
 //Monster? monster = new();
 //monster.UseManualStatus();
@@ -85,7 +86,9 @@ brocc.Weapon = quarterstaff!;
 #endregion
 
 #region Testing Spell Attack
-
-await brocc.ChooseActionAsync();
+{
+    brocc.ShowAbilityScores();
+    CombatSystem.EngageInBattle();
+}
 
 #endregion
