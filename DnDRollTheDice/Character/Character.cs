@@ -80,8 +80,10 @@ internal class Character
 
         int attackValue = diceRolled + attackBonus + Proficiency;
 
-        Console.WriteLine($"Attack Roll = Dice({diceRolled}) + Skill Bonus({attackBonus}) + Proficiency Bonus({Proficiency}) = {attackValue}");
-        return attackValue;
+    private int AssignAttackBonus(Spells? spell)
+    {
+        int attackBonus = (spell != null) ? ModifierValue(AbilityScores[ClassInformation!.SpellCastingAbility!]) : RangeSkillBased();
+        return attackBonus;
     }
 
     public static bool ReachArmorClass(Character character, int attackRoll)
