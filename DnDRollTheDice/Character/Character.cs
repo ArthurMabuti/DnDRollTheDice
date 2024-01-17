@@ -121,9 +121,25 @@ internal class Character
         }
     }
 
+    protected string AttackSource(Character character, Spells? spell)
+    {
+        if (character is Monster monster)
+            return monster.ChooseMonsterAction();
+        return (spell == null) ? Weapon.Name! : spell.Name!;
+    }
+
+    protected int CalculateDamage(Character character, string actionName, int attackRoll, Spells? spell)
+    {
+        if(character is Monster monster)
+            return monster.SelectMonsterAction(actionName).Damage!.DamageRoll(CriticalHit(attackRoll));
+        return (spell == null)
+            ? Weapon.Damage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill())
+            : spell.SpellDamage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill());
+    }
+
     public T ChooseTarget<T>(List<T> allCharacters) where T : Character
     {
-        Console.WriteLine($"** {Name}' turn **");
+
         T target = null!;
         Console.WriteLine("Which target do you want to attack?");
         foreach (Character character in allCharacters)
