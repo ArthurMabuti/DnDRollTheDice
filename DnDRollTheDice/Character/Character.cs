@@ -124,13 +124,14 @@ internal class Character
 
         int attackRoll = AttackRoll(spell);
 
+    public void MakingAnAttack(Character attacker, Character target, string actionName, int attackRoll, Spells? spell = null)
+    {
+        Console.WriteLine($"Making a {actionName} attack against {target.Name!}!");
         if (ReachArmorClass(target, attackRoll))
         {
             Console.WriteLine("Attack successful!");
 
-            int damage = (spell == null)
-                ? Weapon.Damage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill())
-                : spell.SpellDamage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill());
+            int damage = CalculateDamage(attacker!, actionName, attackRoll, spell);
 
             Console.WriteLine($"Damage = {damage}");
             target.HitPoints -= damage;
