@@ -117,12 +117,23 @@ internal class Character
 
     public void DealingDamage<T>(List<T> allCharacters, Spells? spell = null) where T : Character
     {
+        Character? character = this;
+
+        if(character is Monster) Console.WriteLine($"** {Name}' turn **");
         Character target = ChooseTarget(allCharacters);
-        string? attackSource = (spell == null) ? Weapon.Name : spell.Name;
+        string? attackSource = AttackSource(character!, spell);
 
-        Console.WriteLine($"Making a {attackSource} attack against {target.Name!}!");
-
-        int attackRoll = AttackRoll(spell);
+        if(attackSource.ToLower() == "multiattack")
+        {
+            Monster? monster = character as Monster;
+            monster!.MultiAttack(target);
+        }
+        else
+        {
+            int attackRoll = AttackRoll(character!, attackSource, spell);
+            MakingAnAttack(this, target, attackSource, attackRoll, spell);
+        }
+    }
 
     public void MakingAnAttack(Character attacker, Character target, string actionName, int attackRoll, Spells? spell = null)
     {
