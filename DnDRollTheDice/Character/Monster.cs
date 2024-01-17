@@ -87,12 +87,12 @@ internal class Monster : Character
     public void MultiAttack(Character character)
     {
         int numberOfAttacks = 0;
-        List<MultiAttackActions> multiAttackActions = Actions.Find(act => act.Name == "Multiattack")!.MultiAttackActions;
+        List<MultiAttackActions>? multiAttackActions = Actions.Find(act => act.Name == "Multiattack")!.MultiAttackActions;
         foreach (var action in Actions)
         {
             if (action.Name == "Multiattack") continue;
             
-            MultiAttackActions multiAttackInformation = multiAttackActions.Find(multiAct => multiAct.MultiAttackActionName == action.Name)!;
+            MultiAttackActions multiAttackInformation = multiAttackActions!.Find(multiAct => multiAct.MultiAttackActionName == action.Name)!;
 
             if (multiAttackInformation == null) continue;
 
@@ -100,7 +100,8 @@ internal class Monster : Character
             numberOfAttacks = multiAttackInformation.MultiAttackCount;
             while (numberOfAttacks > 0)
             {
-                DealingDamage(character, attackAction.Name!);
+                int attackRoll = AttackRoll(this, attackAction.Name);
+                MakingAnAttack(this, character, attackAction.Name!, attackRoll);
                 numberOfAttacks--;
             }
         }
