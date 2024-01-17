@@ -11,7 +11,7 @@ internal class Actions
     [JsonPropertyName("attack_bonus")]
     public int AttackBonus { get; set; }
     [JsonPropertyName("damage")]
-    public List<Damage> damage { get; set; }
+    public List<Damage>? damage { get; set; }
     public Damage? Damage
     {
         get => damage!.First();
@@ -20,7 +20,7 @@ internal class Actions
 
     //MultiAttack Properties
     [JsonPropertyName("actions")]
-    public List<MultiAttackActions> MultiAttackActions { get; set; }
+    public List<MultiAttackActions>? MultiAttackActions { get; set; }
 
     public Actions()
     {
