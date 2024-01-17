@@ -31,30 +31,6 @@ internal class Monster : Character
         return monsterAction;
     }
 
-    public int AttackRoll(string actionName)
-    {
-        int diceRolled = Roll.DiceRoll(1, 20);
-
-        int attackValue = diceRolled + SelectMonsterAction(actionName)!.AttackBonus;
-        Console.WriteLine($"Attack Roll = Dice({diceRolled}) + Attack Bonus({SelectMonsterAction(actionName)!.AttackBonus}) = {attackValue}");
-        return attackValue;
-    }
-
-    public void AttackAction<T>(List<T> allCharacters) where T : Character
-    {
-        Character target = ChooseTarget(allCharacters);
-        string attackOption = ChooseMonsterAction();
-
-        if (attackOption == "Multiattack")
-        {
-            MultiAttack(target);
-        }
-        else
-        {
-            DealingDamage(target, attackOption);
-        }
-    }
-
     public string ChooseMonsterAction()
     {
         Console.WriteLine("Which action do you want to use to attack?");
@@ -65,23 +41,6 @@ internal class Monster : Character
         string attackOption = Console.ReadLine()!;
 
         return attackOption;
-    }
-
-    public void DealingDamage(Character character, string actionName)
-    {
-        Console.WriteLine($"Making a {actionName} attack against {character.Name}!");
-        int attackRoll = AttackRoll(actionName);
-        if (ReachArmorClass(character, attackRoll))
-        {
-            Console.WriteLine("Attack successful!");
-            int damage = SelectMonsterAction(actionName).Damage!.DamageRoll(CriticalHit(attackRoll));
-            Console.WriteLine($"Damage = {damage}");
-            character.HitPoints -= damage;
-            Console.WriteLine($"Actual HP from {character.Name} = {character.HitPoints}");
-            SetUnconscious(character);
-        }
-        else
-            Console.WriteLine("Attack missed!");
     }
 
     public void MultiAttack(Character character)
