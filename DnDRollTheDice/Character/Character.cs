@@ -31,6 +31,7 @@ internal class Character
     public string? Class { get; set; }
     public Class? ClassInformation { get; set; }
     public List<Spells> KnownSpells { get; set; }
+    public RollType RollType { get; set; } = RollType.Normal;
 
     public Character()
     {
