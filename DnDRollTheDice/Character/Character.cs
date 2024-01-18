@@ -2,6 +2,7 @@
 using DnDRollTheDice.Character.CharacterDetails;
 using DnDRollTheDice.Character.CharacterItems;
 using DnDRollTheDice.Character.CharacterSpells;
+using DnDRollTheDice.DiceRolls;
 using DnDRollTheDice.Services;
 using System.Text.Json.Serialization;
 
@@ -75,7 +76,7 @@ internal class Character
 
     public int AttackRoll(Character character, string? actionName = null, Spells? spell = null)
     {
-        int diceRolled = Roll.DiceRoll(1, 20);
+        int diceRolled = DetermineDiceRoll();
 
         int attackBonus;
         int attackValue;
@@ -105,6 +106,7 @@ internal class Character
             _ => 0,
         };
     }
+
     private int RangeSkillBased()
     {
         int rangeSkillBased = (Weapon.Range == "Ranged") ? ModifierValue(AbilityScores["Dexterity"]) : ModifierValue(BestFightingSkill());
