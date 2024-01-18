@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using DnDRollTheDice.DiceRolls;
 
 namespace DnDRollTheDice.Character.CharacterDetails;
 public class Damage
