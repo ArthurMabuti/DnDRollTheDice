@@ -95,6 +95,16 @@ internal class Character
         return attackValue;
     }
 
+    private int DetermineDiceRoll()
+    {
+        return RollType switch
+        {
+            RollType.Normal => Roll.DiceRoll(1, 20),
+            RollType.Disadvantage => Roll.DisadvantageDiceRoll(),
+            RollType.Advantage => Roll.AdvantageDiceRoll(),
+            _ => 0,
+        };
+    }
     private int RangeSkillBased()
     {
         int rangeSkillBased = (Weapon.Range == "Ranged") ? ModifierValue(AbilityScores["Dexterity"]) : ModifierValue(BestFightingSkill());
