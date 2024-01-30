@@ -33,8 +33,8 @@ brocc.CharacterWithRandomAbilityScore();
 
 #region Testing Monster API
 
-Monster? monster1 = await apiService.GetMonsterFromApiAsync("griffon");
-Monster? monster2 = await apiService.GetMonsterFromApiAsync("hill-giant");
+Monster? monster1 = await apiService.GetMonsterFromApiAsync("kobold");
+Monster? monster2 = await apiService.GetMonsterFromApiAsync("goblin");
 
 //Monster? monster = new();
 //monster.UseManualStatus();
