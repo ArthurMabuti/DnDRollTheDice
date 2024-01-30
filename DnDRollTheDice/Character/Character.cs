@@ -1,5 +1,6 @@
 ﻿using DnDRollTheDice.Character.CharacterClass;
 using DnDRollTheDice.Character.CharacterDetails;
+using DnDRollTheDice.Character.CharacterDetails.Conditions;
 using DnDRollTheDice.Character.CharacterItems;
 using DnDRollTheDice.Character.CharacterSpells;
 using DnDRollTheDice.DiceRolls;
