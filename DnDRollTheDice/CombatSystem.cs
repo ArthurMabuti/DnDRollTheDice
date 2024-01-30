@@ -18,7 +18,7 @@ internal class CombatSystem
 
         OrderCharactersByInitiative();
 
-        while (!allMonsters.All(mon => mon.IsUnconscious()) && !allPlayerCharacters.All(cha => cha.IsUnconscious()))
+        do
         {
             foreach (var character in AllCharacters)
             {
@@ -31,11 +31,11 @@ internal class CombatSystem
                 }
                 if (character is Monster monsterCharacter && monsterCharacter.HitPoints > 0)
                 {
-                    if(allPlayerCharacters.All(cha => cha.IsUnconscious())) break;
+                    if (allPlayerCharacters.All(cha => cha.IsUnconscious())) break;
                     monsterCharacter.DealingDamage(allPlayerCharacters);
                 }
             }
-        }
+        } while (true);
     }
 
     private static void OrderCharactersByInitiative()
