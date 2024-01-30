@@ -33,6 +33,7 @@ internal class Character
     public Class? ClassInformation { get; set; }
     public List<Spells> KnownSpells { get; set; }
     public RollType RollType { get; set; } = RollType.Normal;
+    public List<Conditions>? Conditions { get; private set; }
 
     public Character()
     {
@@ -41,6 +42,7 @@ internal class Character
         Weapon = new();
         armorClass = [];
         KnownSpells = [];
+        Conditions = [];
         CombatSystem.AddCharacter(this);
     }
 
