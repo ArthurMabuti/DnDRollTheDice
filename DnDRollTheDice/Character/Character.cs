@@ -234,4 +234,19 @@ internal class Character
             ClassInformation = classList?.Class?.First();
         }
     }
+
+    public void ApplyCondition(Conditions condition)
+    {
+        Conditions!.Add(condition);
+        Console.WriteLine($"{Name} is now {condition}.");
+    }
+
+    public void RemoveCondition(Conditions condition)
+    {
+        if (Conditions!.Contains(condition))
+        {
+            Conditions.Remove(condition);
+            Console.WriteLine($"{Name} is no longer {condition}.");
+        }
+    }
 }
