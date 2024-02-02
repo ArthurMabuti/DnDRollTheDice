@@ -114,4 +114,10 @@ Level 3");
             AbilityScores[abilityName] = GenerateRandomAbilityScore();
         }
     }
+
+    private static bool NonCombatSpell(Spells spell)
+    {
+        if(!spell.MakeSpellAttack && spell.SavingThrow is null) return true;
+        return false;
+    }
 }
