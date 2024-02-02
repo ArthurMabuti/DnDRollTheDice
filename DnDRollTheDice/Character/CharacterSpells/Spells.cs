@@ -1,4 +1,5 @@
 ﻿using DnDRollTheDice.Character.CharacterDetails;
+using DnDRollTheDice.Character.CharacterDetails.Conditions;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
@@ -22,6 +23,7 @@ internal class Spells
     [JsonPropertyName("requires_concentration")]
     public bool Concentration { get; set; }
     public Damage? SpellDamage => SpellDamageByDescription();
+    public string? SavingThrow => SpellSavingThrowByDescription();
     //Components
     [JsonPropertyName("requires_verbal_components")]
     public bool Verbal { get; set; }
@@ -43,8 +45,16 @@ internal class Spells
     }
 
     public Match DescriptionHasDamageDice(string description)
+    public string SpellSavingThrowByDescription()
     {
-        Match match = Regex.Match(description, @"(\d{2}|\d{1})d(\d{2}|\d{1})");
-        return match;
+        // A regular expression to find a word before "saving throw"
+        string pattern = @"(\w+)\s+saving\s+throw";
+
+        // Find matches in the input using the regular expression
+        Match match = Regex.Match(Description!, pattern);
+
+        // Return the match's first word
+        if(match.Success) return match.Groups[1].Value;
+        return null!;
     }
 }
