@@ -57,7 +57,7 @@ internal class Character
     {
         int rollValue = Roll.DiceRoll(1, 20);
         int finalResult = rollValue + ModifierValue(AbilityScores["Dexterity"]);
-        Console.WriteLine($"The dice roll from {Name} for initiative was {rollValue}");
+        Console.WriteLine($"The dice roll from {Name} for initiative was {finalResult}");
         return finalResult;
     }
 
