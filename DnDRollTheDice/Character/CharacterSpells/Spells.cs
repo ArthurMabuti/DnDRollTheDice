@@ -35,7 +35,7 @@ internal class Spells
     public Damage SpellDamageByDescription()
     {
         Damage damage = new();
-        Match match = DescriptionHasDamageDice(Description!);
+        Match match = DamageDiceRegex().Match(Description!);
         if (match.Success)
         {
             damage.DamageDice = match.Value;
@@ -57,4 +57,7 @@ internal class Spells
         if(match.Success) return match.Groups[1].Value;
         return null!;
     }
+
+    [GeneratedRegex(@"(\d{2}|\d{1})d(\d{2}|\d{1})")]
+    private static partial Regex DamageDiceRegex();
 }
