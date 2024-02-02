@@ -93,7 +93,7 @@ Level 3");
     private int GenerateRandomAbilityScore()
     {
         //Roll 4 6-sized dice
-        List<int> rollsResult = new();
+        List<int> rollsResult = [];
         for (int i = 0; i < 4; i++)
         {
             int roll = Roll.DiceRoll(1, 6);
