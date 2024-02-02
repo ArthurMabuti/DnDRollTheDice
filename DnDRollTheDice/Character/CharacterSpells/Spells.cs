@@ -62,7 +62,7 @@ internal partial class Spells
     }
 
     public string SpellSavingThrowByDescription()
-    {
+    { 
         // A regular expression to find a word before "saving throw"
         string pattern = @"(\w+)\s+saving\s+throw";
 
