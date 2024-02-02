@@ -1,6 +1,7 @@
 ﻿namespace DnDRollTheDice.Character.CharacterDetails.Conditions;
 internal enum Conditions
 {
+    None,
     Blinded,
     Charmed,
     Frightened,
