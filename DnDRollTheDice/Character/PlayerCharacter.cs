@@ -62,10 +62,11 @@ Level 3");
         Console.WriteLine("Which spell do you want to use?");
         foreach (var spell in KnownSpells!)
         {
+            if (NonCombatSpell(spell)) continue;
             Console.WriteLine(spell.Name);
         }
         string spellName = Console.ReadLine()!.ToLower();
-        Spells chosenSpell = KnownSpells.Find(spl => spl.Name!.ToLower() == spellName)!;
+        Spells chosenSpell = KnownSpells.Find(spl => spl.Name!.Equals(spellName, StringComparison.CurrentCultureIgnoreCase))!;
         DealingDamage(allCharacters, chosenSpell);
     }
 
