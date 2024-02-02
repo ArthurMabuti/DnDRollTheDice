@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace DnDRollTheDice.Character.CharacterSpells;
-internal class Spells
+internal partial class Spells
 {
     [JsonPropertyName("name")]
     public string? Name { get; set; }
@@ -25,6 +25,7 @@ internal class Spells
     public Damage? SpellDamage => SpellDamageByDescription();
     public Conditions Condition => SpellConditionByDescription();
     public string? SavingThrow => SpellSavingThrowByDescription();
+    public bool MakeSpellAttack => MakeSpellAttackByDescription();
     //Components
     [JsonPropertyName("requires_verbal_components")]
     public bool Verbal { get; set; }
@@ -71,6 +72,19 @@ internal class Spells
         // Return the match's first word
         if(match.Success) return match.Groups[1].Value;
         return null!;
+    }
+
+    public bool MakeSpellAttackByDescription()
+    {
+        // A regular expression to find the sentence that states a spell attack
+        string pattern = @"Make\s+a\s+(ranged|melee)\s+spell\s+attack";
+
+        // Find matches in the input using the regular expression
+        Match match = Regex.Match(Description!, pattern);
+
+        // Return if it has to make a spell attack
+        if (match.Success) return true;
+        return false;
     }
 
     [GeneratedRegex(@"(\d{2}|\d{1})d(\d{2}|\d{1})")]
