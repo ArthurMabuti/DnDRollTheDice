@@ -81,7 +81,7 @@ Level 3");
 
     private void CreatingAbilityScores()
     {
-        string[] abilityNames = { "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma" };
+        string[] abilityNames = ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"];
 
         foreach (string abilityName in abilityNames)
         {
