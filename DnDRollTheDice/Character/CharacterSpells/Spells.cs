@@ -23,6 +23,7 @@ internal class Spells
     [JsonPropertyName("requires_concentration")]
     public bool Concentration { get; set; }
     public Damage? SpellDamage => SpellDamageByDescription();
+    public Conditions Condition => SpellConditionByDescription();
     public string? SavingThrow => SpellSavingThrowByDescription();
     //Components
     [JsonPropertyName("requires_verbal_components")]
@@ -44,7 +45,21 @@ internal class Spells
         return null!;
     }
 
-    public Match DescriptionHasDamageDice(string description)
+    public Conditions SpellConditionByDescription()
+    {
+        List<string> conditions = Enum.GetNames(typeof(Conditions)).ToList();
+
+        foreach (var condition in conditions)
+        {
+            if (Regex.IsMatch(Description!, @"\b" + condition.ToLower() + @"\b"))
+            {
+                return (Conditions)Enum.Parse(typeof(Conditions), condition);
+            }
+        }
+
+        return Conditions.None;
+    }
+
     public string SpellSavingThrowByDescription()
     {
         // A regular expression to find a word before "saving throw"
