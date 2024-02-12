@@ -10,7 +10,7 @@ ApiService apiService = new();
 PlayerCharacter brocc = new()
 {
     Name = "Brocc",
-    Class = "Cleric",
+    Class = "Wizard",
     Proficiency = 2,
     HitPoints = 10
 };
