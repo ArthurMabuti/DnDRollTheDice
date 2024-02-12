@@ -61,6 +61,14 @@ internal class Character
         return finalResult;
     }
 
+    public int SavingThrow(string ability)
+    {
+        int rollValue = Roll.DiceRoll(1, 20);
+        int finalResult = rollValue + ModifierValue(AbilityScores[ability]);
+        Console.WriteLine($"The dice roll from {Name} for the saving throw was {finalResult}");
+        return finalResult;
+    }
+
     public void Interface()
     {
         Console.WriteLine($@"{Name} CA: {ArmorClass.Value}");
@@ -250,4 +258,6 @@ internal class Character
             Console.WriteLine($"{Name} is no longer {condition}.");
         }
     }
+
+    public void 
 }
