@@ -141,32 +141,30 @@ internal class Character
 
     public void DealingDamage<T>(List<T> allCharacters, Spells? spell = null) where T : Character
     {
-        Character? character = this;
-
-        if(character is Monster) Console.WriteLine($"** {Name}' turn **");
+        if(this is Monster) Console.WriteLine($"** {Name}' turn **");
         Character target = ChooseTarget(allCharacters);
-        string? attackSource = AttackSource(character!, spell);
+        string? attackSource = AttackSource(spell);
 
         if(attackSource.ToLower() == "multiattack")
         {
-            Monster? monster = character as Monster;
+            Monster? monster = this as Monster;
             monster!.MultiAttack(target);
         }
         else
         {
-            int attackRoll = AttackRoll(character!, attackSource, spell);
-            MakingAnAttack(this, target, attackSource, attackRoll, spell);
+            int attackRoll = AttackRoll(this, attackSource, spell);
+            MakingAnAttack(target, attackSource, attackRoll, spell);
         }
     }
 
-    public void MakingAnAttack(Character attacker, Character target, string actionName, int attackRoll, Spells? spell = null)
+    public void MakingAnAttack(Character target, string actionName, int attackRoll, Spells? spell = null)
     {
         Console.WriteLine($"Making a {actionName} attack against {target.Name!}!");
         if (ReachArmorClass(target, attackRoll))
         {
             Console.WriteLine("Attack successful!");
 
-            int damage = CalculateDamage(attacker!, actionName, attackRoll, spell);
+            int damage = CalculateDamage(actionName, attackRoll, spell);
 
             Console.WriteLine($"Damage = {damage}");
             target.HitPoints -= damage;
@@ -179,16 +177,16 @@ internal class Character
         }
     }
 
-    protected string AttackSource(Character character, Spells? spell)
+    protected string AttackSource(Spells? spell)
     {
-        if (character is Monster monster)
+        if (this is Monster monster)
             return monster.ChooseMonsterAction();
         return (spell == null) ? Weapon.Name! : spell.Name!;
     }
 
-    protected int CalculateDamage(Character character, string actionName, int attackRoll, Spells? spell)
+    protected int CalculateDamage(string actionName, int attackRoll, Spells? spell)
     {
-        if(character is Monster monster)
+        if(this is Monster monster)
             return monster.SelectMonsterAction(actionName).Damage!.DamageRoll(CriticalHit(attackRoll));
         return (spell == null)
             ? Weapon.Damage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill())
@@ -258,6 +256,4 @@ internal class Character
             Console.WriteLine($"{Name} is no longer {condition}.");
         }
     }
-
-    public void 
 }
