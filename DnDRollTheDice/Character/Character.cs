@@ -85,13 +85,13 @@ internal class Character
         }
     }
 
-    public int AttackRoll(Character character, string? actionName = null, Spells? spell = null)
+    public int AttackRoll(string? actionName = null, Spells? spell = null)
     {
         int diceRolled = DetermineDiceRoll();
 
         int attackBonus;
         int attackValue;
-        if(character is Monster monster)
+        if(this is Monster monster)
         {
             attackBonus = monster.SelectMonsterAction(actionName!).AttackBonus;
             attackValue = diceRolled + attackBonus;
@@ -152,7 +152,7 @@ internal class Character
         }
         else
         {
-            int attackRoll = AttackRoll(this, attackSource, spell);
+            int attackRoll = AttackRoll(attackSource, spell);
             MakingAnAttack(target, attackSource, attackRoll, spell);
         }
     }
