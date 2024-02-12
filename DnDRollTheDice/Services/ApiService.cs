@@ -34,7 +34,7 @@ internal class ApiService
 
     public async Task<SpellList?> GetSpellListFromApiAsync(int level, string characterClass)
     {
-        return await GetEntityFromApiAsync<SpellList>(Open5eApiBaseUrl, $"spells/?document__slug=wotc-srd&spell_level={level}&spell_lists={characterClass.ToLower()}");
+        return await GetEntityFromApiAsync<SpellList>(Open5eApiBaseUrl, $"spells/?document__slug__in=wotc-srd%2Co5e&spell_level={level}&spell_lists={characterClass.ToLower()}");
     }
 
     public async Task<ClassList?> GetClassFromApiAsync(string characterClass)
