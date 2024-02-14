@@ -144,7 +144,7 @@ internal class Character
     public void DealingDamage<T>(List<T> allCharacters, Spells? spell = null) where T : Character
     {
         // If monster, shows it's name
-        if(this is Monster) Console.WriteLine($"** {Name}' turn **");
+        if(this is Monster) Console.WriteLine($"** {Name}'s turn **");
         // Choose in which character will occur the action
         Character target = ChooseTarget(allCharacters);
         // Choose the name of the action
@@ -275,4 +275,7 @@ internal class Character
             Console.WriteLine($"{Name} is no longer {condition}.");
         }
     }
+
+    //TODO Separate methods from Spells, Weapon and Monster Actions. 
+    //If it is a Weapon attack, the methods about damage shall be on the class Weapon and vice-versa
 }
