@@ -1,5 +1,6 @@
 ﻿using DnDRollTheDice.Character.CharacterDetails;
 using DnDRollTheDice.Character.CharacterDetails.Conditions;
+using DnDRollTheDice.DiceRolls;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
@@ -34,7 +35,46 @@ internal partial class Spells
     [JsonPropertyName("requires_material_components")]
     public bool Material { get; set; }
 
-    public Damage SpellDamageByDescription()
+    public void CastingSpell(Character spellCaster, Character target)
+    {
+        if (OffensiveSpell())
+        {
+            // Make a dice roll or saving throw to see how it goes
+            if (MakeSpellAttack)
+            {
+                int attackRoll = spellCaster.AttackRoll(null, this);
+                spellCaster.MakingAnAttack(target, Name!, attackRoll, this);
+            }
+            if(SavingThrow is not null)
+            {
+                string ability = FirstLetterUpper(SavingThrow!);
+                int savingThrowResult = target.SavingThrow(ability);
+                if(SpellCasterAbility(spellCaster, ability) > savingThrowResult)
+                {
+                    // Create a method to subtract the full hitpoints based on the damage or half of it
+                }
+            }
+            // After that, if has an condition, make it happen
+        }
+    }
+
+    private int SpellCasterAbility(Character spellCaster, string ability)
+    {
+        return 8 + spellCaster.ModifierValue(spellCaster.AbilityScores[ability]) + spellCaster.Proficiency;
+    }
+
+    public static string FirstLetterUpper(string text)
+    {
+        return char.ToUpper(text[0]) + text[1..];
+    }
+
+    private bool OffensiveSpell()
+    {
+        if ((MakeSpellAttack || SavingThrow is not null) && SpellDamage is not null) return true;
+        return false;
+    }
+
+    private Damage SpellDamageByDescription()
     {
         Damage damage = new();
         Match match = DamageDiceRegex().Match(Description!);
@@ -46,7 +86,7 @@ internal partial class Spells
         return null!;
     }
 
-    public Conditions SpellConditionByDescription()
+    private Conditions SpellConditionByDescription()
     {
         List<string> conditions = Enum.GetNames(typeof(Conditions)).ToList();
 
@@ -61,7 +101,7 @@ internal partial class Spells
         return Conditions.None;
     }
 
-    public string SpellSavingThrowByDescription()
+    private string SpellSavingThrowByDescription()
     { 
         // A regular expression to find a word before "saving throw"
         string pattern = @"(\w+)\s+saving\s+throw";
@@ -74,7 +114,7 @@ internal partial class Spells
         return null!;
     }
 
-    public bool MakeSpellAttackByDescription()
+    private bool MakeSpellAttackByDescription()
     {
         // A regular expression to find the sentence that states a spell attack
         string pattern = @"Make\s+a\s+(ranged|melee)\s+spell\s+attack";
@@ -90,3 +130,13 @@ internal partial class Spells
     [GeneratedRegex(@"(\d{2}|\d{1})d(\d{2}|\d{1})")]
     private static partial Regex DamageDiceRegex();
 }
+
+//TODO Implement the use of saving throw and applying condition using the Ray of Sickness 1st level spell []
+//TODO Add other spells that are being removed
+/*
+Spell Types:
+Offensive = SpellAttack|SavingThrow + Damage [OK]
+Control = SavingThrow + Condition [OK]
+Automatic = Damage+Condition (Sleep) [] | Damage (Magic Missile) []
+Healing = HitPoints []
+*/
