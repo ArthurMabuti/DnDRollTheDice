@@ -61,8 +61,8 @@ internal class Monster : Character
             numberOfAttacks = multiAttackInformation.MultiAttackCount;
             while (numberOfAttacks > 0)
             {
-                int attackRoll = AttackRoll(this, attackAction.Name);
-                MakingAnAttack(this, character, attackAction.Name!, attackRoll);
+                int attackRoll = AttackRoll(attackAction.Name);
+                MakingAnAttack(character, attackAction.Name!, attackRoll);
                 numberOfAttacks--;
             }
         }
