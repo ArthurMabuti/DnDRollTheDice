@@ -125,6 +125,12 @@ internal class Character
         return rangeSkillBased;
     }
 
+    private int BestFightingSkill()
+    {
+        int fightingSkill = (AbilityScores["Strength"] > AbilityScores["Dexterity"]) ? AbilityScores["Strength"] : AbilityScores["Dexterity"];
+        return fightingSkill;
+    }
+
     private int AssignAttackBonus(Spells? spell)
     {
         string spellCastingAbility = ClassInformation!.SpellCastingAbility!;
