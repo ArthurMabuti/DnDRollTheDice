@@ -141,34 +141,46 @@ internal class Character
 
     public void DealingDamage<T>(List<T> allCharacters, Spells? spell = null) where T : Character
     {
+        // If monster, shows it's name
         if(this is Monster) Console.WriteLine($"** {Name}' turn **");
+        // Choose in which character will occur the action
         Character target = ChooseTarget(allCharacters);
+        // Choose the name of the action
         string? attackSource = AttackSource(spell);
 
+        // If a monster chose multiattack it makes the combination of attacks from it's class
         if(attackSource.ToLower() == "multiattack")
         {
             Monster? monster = this as Monster;
             monster!.MultiAttack(target);
         }
+        // Else makes an attack based the name of the action
         else
-        {
+        { 
+            // Makes a dice roll to try hit the target
             int attackRoll = AttackRoll(attackSource, spell);
+            // Makes the attack based on the chose action
             MakingAnAttack(target, attackSource, attackRoll, spell);
         }
     }
 
     public void MakingAnAttack(Character target, string actionName, int attackRoll, Spells? spell = null)
     {
+        // Write which action is happening to whom
         Console.WriteLine($"Making a {actionName} attack against {target.Name!}!");
+        // If the dice roll surpasses the Armor Class from the Target do the damage
         if (ReachArmorClass(target, attackRoll))
         {
             Console.WriteLine("Attack successful!");
-
+            // Sums the many damage dices roll + ability scores
             int damage = CalculateDamage(actionName, attackRoll, spell);
 
             Console.WriteLine($"Damage = {damage}");
+            // Subtracts the target total HitPoints with the damage taken
             target.HitPoints -= damage;
+            // Shows actual HitPoints total from target
             Console.WriteLine($"Actual HP from {target.Name} = {target.HitPoints}");
+            // Set Unconsciuous if the HP gets to 0
             SetUnconscious(target);
         }
         else
@@ -179,6 +191,7 @@ internal class Character
 
     protected string AttackSource(Spells? spell)
     {
+        // Returns the weapon/spell name or, if a monster, the action name
         if (this is Monster monster)
             return monster.ChooseMonsterAction();
         return (spell == null) ? Weapon.Name! : spell.Name!;
@@ -186,8 +199,10 @@ internal class Character
 
     protected int CalculateDamage(string actionName, int attackRoll, Spells? spell)
     {
+        //If is a monster, gets the damage dices from its action and makes the rolls
         if(this is Monster monster)
             return monster.SelectMonsterAction(actionName).Damage!.DamageRoll(CriticalHit(attackRoll));
+        // Else gets the damage dice from weapon/spell and makes the dice rolls
         return (spell == null)
             ? Weapon.Damage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill())
             : spell.SpellDamage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill());
@@ -195,16 +210,18 @@ internal class Character
 
     public T ChooseTarget<T>(List<T> allCharacters) where T : Character
     {
-
-        T target = null!;
         Console.WriteLine("Which target do you want to attack?");
         foreach (Character character in allCharacters)
         {
+            //If target it's not unconscious, show his name for selection
             if(!character.IsUnconscious())
                 Console.WriteLine(character.Name);
         }
+        // User writes the name of the target
         string targetName = Console.ReadLine()!;
-        target = allCharacters.Find(cha => cha.Name == targetName)!;
+        // Find the target in the list of all created targets
+        T target = allCharacters.Find(cha => cha.Name == targetName)!;
+        // Return the Character class
         return target;
     }
 
