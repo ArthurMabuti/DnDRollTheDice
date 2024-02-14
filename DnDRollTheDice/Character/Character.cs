@@ -87,6 +87,7 @@ internal class Character
 
     public int AttackRoll(string? actionName = null, Spells? spell = null)
     {
+        // Verifies if the dice roll will be made with normally or with advantage or disadvantage and makes the roll
         int diceRolled = DetermineDiceRoll();
 
         int attackBonus;
@@ -126,7 +127,8 @@ internal class Character
 
     private int AssignAttackBonus(Spells? spell)
     {
-        int attackBonus = (spell != null) ? ModifierValue(AbilityScores[ClassInformation!.SpellCastingAbility!]) : RangeSkillBased();
+        string spellCastingAbility = ClassInformation!.SpellCastingAbility!;
+        int attackBonus = (spell != null) ? ModifierValue(AbilityScores[spellCastingAbility]) : RangeSkillBased();
         return attackBonus;
     }
 
