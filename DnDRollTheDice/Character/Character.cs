@@ -242,12 +242,6 @@ internal class Character
         return false;
     }
 
-    public int BestFightingSkill()
-    {
-        int fightingSkill = (AbilityScores["Strength"] > AbilityScores["Dexterity"]) ? AbilityScores["Strength"] : AbilityScores["Dexterity"];
-        return fightingSkill;
-    }
-
     public void SetUnconscious(Character character)
     {
         if(character.HitPoints <= 0) character.Unconscious = true;
