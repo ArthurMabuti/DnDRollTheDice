@@ -242,7 +242,7 @@ internal class Character
         return false;
     }
 
-    public void SetUnconscious(Character character)
+    public static void SetUnconscious(Character character)
     {
         if(character.HitPoints <= 0) character.Unconscious = true;
     }
