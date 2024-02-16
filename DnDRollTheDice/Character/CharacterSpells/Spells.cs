@@ -49,10 +49,27 @@ internal partial class Spells
             {
                 string ability = FirstLetterUpper(SavingThrow!);
                 int savingThrowResult = target.SavingThrow(ability);
+                int totalDamage;
+                // If the spell caster ability is higher than the result the target gets the full damage
                 if(SpellCasterAbility(spellCaster, ability) > savingThrowResult)
                 {
-                    // Create a method to subtract the full hitpoints based on the damage or half of it
+                    Console.WriteLine("Saving Throw Failed");
+                    //Full damage
+                    totalDamage = SpellDamage!.DamageRoll(false);
                 }
+                else
+                {
+                    Console.WriteLine("Saving Throw Successful");
+                    //Half Damage
+                    totalDamage = SpellDamage!.DamageRoll(false) / 2;
+                }
+                Console.WriteLine($"Damage = {totalDamage}");
+                // Subtracts the target total HitPoints with the damage taken
+                target.HitPoints -= totalDamage;
+                // Shows actual HitPoints total from target
+                Console.WriteLine($"Actual HP from {target.Name} = {target.HitPoints}");
+                // Set Unconsciuous if the HP gets to 0
+                Character.SetUnconscious(target);
             }
             // After that, if has an condition, make it happen
         }
