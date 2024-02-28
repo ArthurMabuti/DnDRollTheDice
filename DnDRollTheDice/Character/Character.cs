@@ -96,7 +96,7 @@ internal class Character
         {
             attackBonus = monster.SelectMonsterAction(actionName!).AttackBonus;
             attackValue = diceRolled + attackBonus;
-            Console.WriteLine($"Attack Roll = Dice({diceRolled}) + AttackBobus({attackBonus}) = {attackValue}");
+            Console.WriteLine($"Attack Roll = Dice({diceRolled}) + AttackBonus({attackBonus}) = {attackValue}");
         }
         else
         {
@@ -216,7 +216,7 @@ internal class Character
             : spell.SpellDamage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill());
     }
 
-    public T ChooseTarget<T>(List<T> allCharacters) where T : Character
+    public static T ChooseTarget<T>(List<T> allCharacters) where T : Character
     {
         Console.WriteLine("Which target do you want to attack?");
         foreach (Character character in allCharacters)
