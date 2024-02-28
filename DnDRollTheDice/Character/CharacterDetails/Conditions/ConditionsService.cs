@@ -19,6 +19,7 @@ internal class ConditionsService
     public static void ApplyPoisonedCondition(Character character)
     {
         // Implementação para aplicar a condição "Poisoned" ao personagem
+        character.RollType = DiceRolls.RollType.Disadvantage;
     }
 
     public static void RemoveFrightenedCondition(Character character)
