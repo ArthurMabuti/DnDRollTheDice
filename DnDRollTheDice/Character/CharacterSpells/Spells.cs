@@ -92,7 +92,7 @@ internal partial class Spells
 
     private int SpellCasterAbility(Character spellCaster, string ability)
     {
-        return 8 + spellCaster.ModifierValue(spellCaster.AbilityScores[ability]) + spellCaster.Proficiency;
+        return 8 + spellCaster.Proficiency + spellCaster.ModifierValue(spellCaster.AbilityScores[ability]);
     }
 
     public static string FirstLetterUpper(string text)
