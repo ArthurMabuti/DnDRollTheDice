@@ -176,7 +176,7 @@ internal class Character
     {
         // Write which action is happening to whom
         Console.WriteLine($"Making a {actionName} attack against {target.Name!}!");
-        // If the dice roll surpasses the Armor Class from the Target do the damage
+        // If the dice attackRoll surpasses the Armor Class from the Target, do the damage
         if (ReachArmorClass(target, attackRoll))
         {
             Console.WriteLine("Attack successful!");
