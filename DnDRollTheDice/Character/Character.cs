@@ -147,7 +147,7 @@ internal class Character
         return false;
     }
 
-    public void DealingDamage<T>(List<T> allCharacters, Spells? spell = null) where T : Character
+    public void MakingAnAttack<T>(List<T> allCharacters, Spells? spell = null) where T : Character
     {
         // If monster, shows it's name
         if(this is Monster) Console.WriteLine($"** {Name}'s turn **");
@@ -168,11 +168,11 @@ internal class Character
             // Makes a dice roll to try hit the target
             int attackRoll = AttackRoll(attackSource, spell);
             // Makes the attack based on the chose action
-            MakingAnAttack(target, attackSource, attackRoll, spell);
+            DealingDamage(target, attackSource, attackRoll, spell);
         }
     }
 
-    public void MakingAnAttack(Character target, string actionName, int attackRoll, Spells? spell = null)
+    public void DealingDamage(Character target, string actionName, int attackRoll, Spells? spell = null)
     {
         // Write which action is happening to whom
         Console.WriteLine($"Making a {actionName} attack against {target.Name!}!");
