@@ -39,30 +39,30 @@ internal partial class Spells
     {
         bool madeSpellAttack = false;
         // Verifies if the spell has to make an attackRoll
-            if (MakeSpellAttack)
-            {
+        if (MakeSpellAttack)
+        {
             // Stores the diceRoll result into attackRoll and make an attack depending on the result
-                int attackRoll = spellCaster.AttackRoll(null, this);
-                spellCaster.MakingAnAttack(target, Name!, attackRoll, this);
+            int attackRoll = spellCaster.AttackRoll(null, this);
+            spellCaster.MakingAnAttack(target, Name!, attackRoll, this);
             // Confirms that the spell attack was made
             madeSpellAttack = true;
-            }
+        }
         if (SavingThrow is not null)
-            {
-                string ability = FirstLetterUpper(SavingThrow!);
-                int savingThrowResult = target.SavingThrow(ability);
-                int totalDamage;
+        {
+            string ability = FirstLetterUpper(SavingThrow!);
+            int savingThrowResult = target.SavingThrow(ability);
+            int totalDamage;
             bool savingThrowFailed = false;
-                // If the spell caster ability is higher than the result the target gets the full damage
+            // If the spell caster ability is higher than the result the target gets the full damage
             if (SpellCasterAbility(spellCaster, ability) > savingThrowResult)
-                {
-                    Console.WriteLine("Saving Throw Failed");
+            {
+                Console.WriteLine("Saving Throw Failed");
                 savingThrowFailed = true;
-                }
-                else
-                {
-                    Console.WriteLine("Saving Throw Successful");
-                }
+            }
+            else
+            {
+                Console.WriteLine("Saving Throw Successful");
+            }
             //Verify if it was already made a spell attack to the target
             if (!madeSpellAttack)
             {
