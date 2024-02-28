@@ -67,7 +67,7 @@ Level 3");
         }
         string spellName = Console.ReadLine()!.ToLower();
         Spells chosenSpell = KnownSpells.Find(spl => spl.Name!.Equals(spellName, StringComparison.CurrentCultureIgnoreCase))!;
-        DealingDamage(allCharacters, chosenSpell);
+        chosenSpell.CastingSpell(this, allCharacters);
     }
 
     private async Task GetSpells(int level)
