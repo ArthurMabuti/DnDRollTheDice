@@ -1,4 +1,6 @@
-﻿namespace DnDRollTheDice.Character.CharacterDetails.Conditions;
+﻿using System.Reflection;
+
+namespace DnDRollTheDice.Character.CharacterDetails.Conditions;
 internal class ConditionsService
 {
     public void ApplyCondition(Conditions condition, Character character)
