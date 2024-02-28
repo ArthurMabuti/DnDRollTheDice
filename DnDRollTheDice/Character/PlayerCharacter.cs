@@ -20,7 +20,7 @@ internal class PlayerCharacter : Character
         switch (option)
         {
             case "weapon attack":
-                DealingDamage(allCharacters, null);
+                MakingAnAttack(allCharacters, null);
                 break;
             case "spell casting":
                 SpellsLevelList();
