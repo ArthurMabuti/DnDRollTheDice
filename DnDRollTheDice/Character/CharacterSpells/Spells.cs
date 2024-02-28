@@ -100,12 +100,6 @@ internal partial class Spells
         return char.ToUpper(text[0]) + text[1..];
     }
 
-    private bool OffensiveSpell()
-    {
-        if ((MakeSpellAttack || SavingThrow is not null) && SpellDamage is not null) return true;
-        return false;
-    }
-
     private Damage SpellDamageByDescription()
     {
         Damage damage = new();
