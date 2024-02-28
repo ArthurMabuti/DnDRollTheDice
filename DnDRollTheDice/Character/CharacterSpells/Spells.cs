@@ -37,32 +37,37 @@ internal partial class Spells
 
     public void CastingSpell(Character spellCaster, Character target)
     {
-        if (OffensiveSpell())
-        {
-            // Make a dice roll or saving throw to see how it goes
+        bool madeSpellAttack = false;
+        // Verifies if the spell has to make an attackRoll
             if (MakeSpellAttack)
             {
+            // Stores the diceRoll result into attackRoll and make an attack depending on the result
                 int attackRoll = spellCaster.AttackRoll(null, this);
                 spellCaster.MakingAnAttack(target, Name!, attackRoll, this);
+            // Confirms that the spell attack was made
+            madeSpellAttack = true;
             }
-            if(SavingThrow is not null)
+        if (SavingThrow is not null)
             {
                 string ability = FirstLetterUpper(SavingThrow!);
                 int savingThrowResult = target.SavingThrow(ability);
                 int totalDamage;
+            bool savingThrowFailed = false;
                 // If the spell caster ability is higher than the result the target gets the full damage
-                if(SpellCasterAbility(spellCaster, ability) > savingThrowResult)
+            if (SpellCasterAbility(spellCaster, ability) > savingThrowResult)
                 {
                     Console.WriteLine("Saving Throw Failed");
-                    //Full damage
-                    totalDamage = SpellDamage!.DamageRoll(false);
+                savingThrowFailed = true;
                 }
                 else
                 {
                     Console.WriteLine("Saving Throw Successful");
-                    //Half Damage
-                    totalDamage = SpellDamage!.DamageRoll(false) / 2;
                 }
+            //Verify if it was already made a spell attack to the target
+            if (!madeSpellAttack)
+            {
+                // Depending if it passed the saving throw, takes full damage or half damage
+                totalDamage = savingThrowFailed ? SpellDamage!.DamageRoll(false) : SpellDamage!.DamageRoll(false) / 2;
                 Console.WriteLine($"Damage = {totalDamage}");
                 // Subtracts the target total HitPoints with the damage taken
                 target.HitPoints -= totalDamage;
@@ -71,7 +76,17 @@ internal partial class Spells
                 // Set Unconsciuous if the HP gets to 0
                 Character.SetUnconscious(target);
             }
-            // After that, if has an condition, make it happen
+            // If the spell has a condition, apply on the target
+            if(Condition != Conditions.None)
+            {
+                // Verify if it failed on the saving throw
+                if (savingThrowFailed)
+                {
+                    // Search at the ConditionService class for the method corresponding the condition
+                    ConditionsService cs = new();
+                    cs.ApplyCondition(Condition, target);
+                }
+            }
         }
     }
 
