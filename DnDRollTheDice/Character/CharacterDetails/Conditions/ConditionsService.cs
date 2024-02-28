@@ -12,6 +12,7 @@ internal class ConditionsService
         {
             method.Invoke(this, new object[] { character });
             character.Conditions!.Add(condition);
+            Console.WriteLine($"{character.Name} is {condition}");
         }
         else
         {
