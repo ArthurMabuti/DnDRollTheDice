@@ -62,7 +62,7 @@ internal class Monster : Character
             while (numberOfAttacks > 0)
             {
                 int attackRoll = AttackRoll(attackAction.Name);
-                MakingAnAttack(character, attackAction.Name!, attackRoll);
+                DealingDamage(character, attackAction.Name!, attackRoll);
                 numberOfAttacks--;
             }
         }
