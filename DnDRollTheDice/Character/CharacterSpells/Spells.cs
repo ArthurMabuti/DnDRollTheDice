@@ -1,6 +1,5 @@
 ﻿using DnDRollTheDice.Character.CharacterDetails;
 using DnDRollTheDice.Character.CharacterDetails.Conditions;
-using DnDRollTheDice.DiceRolls;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
@@ -35,56 +34,67 @@ internal partial class Spells
     [JsonPropertyName("requires_material_components")]
     public bool Material { get; set; }
 
-    public void CastingSpell(Character spellCaster, Character target)
+    public void CastingSpell<T>(Character spellCaster, List<T> allCharacters) where T : Character
     {
+        Character target = Character.ChooseTarget(allCharacters);
         bool madeSpellAttack = false;
+        bool spellHit = false;
         // Verifies if the spell has to make an attackRoll
         if (MakeSpellAttack)
         {
             // Stores the diceRoll result into attackRoll and make an attack depending on the result
             int attackRoll = spellCaster.AttackRoll(null, this);
-            spellCaster.MakingAnAttack(target, Name!, attackRoll, this);
+            spellCaster.DealingDamage(target, Name!, attackRoll, this);
             // Confirms that the spell attack was made
             madeSpellAttack = true;
+            // Confirms if the spell hit the target
+            spellHit = Character.ReachArmorClass(target, attackRoll);
         }
         if (SavingThrow is not null)
         {
-            string ability = FirstLetterUpper(SavingThrow!);
-            int savingThrowResult = target.SavingThrow(ability);
-            int totalDamage;
-            bool savingThrowFailed = false;
-            // If the spell caster ability is higher than the result the target gets the full damage
-            if (SpellCasterAbility(spellCaster, ability) > savingThrowResult)
+            if ((madeSpellAttack && !spellHit) || target.IsUnconscious())
             {
-                Console.WriteLine("Saving Throw Failed");
-                savingThrowFailed = true;
+                // If matches the condition, nothing happens
             }
             else
             {
-                Console.WriteLine("Saving Throw Successful");
-            }
-            //Verify if it was already made a spell attack to the target
-            if (!madeSpellAttack)
-            {
-                // Depending if it passed the saving throw, takes full damage or half damage
-                totalDamage = savingThrowFailed ? SpellDamage!.DamageRoll(false) : SpellDamage!.DamageRoll(false) / 2;
-                Console.WriteLine($"Damage = {totalDamage}");
-                // Subtracts the target total HitPoints with the damage taken
-                target.HitPoints -= totalDamage;
-                // Shows actual HitPoints total from target
-                Console.WriteLine($"Actual HP from {target.Name} = {target.HitPoints}");
-                // Set Unconsciuous if the HP gets to 0
-                Character.SetUnconscious(target);
-            }
-            // If the spell has a condition, apply on the target
-            if(Condition != Conditions.None)
-            {
-                // Verify if it failed on the saving throw
-                if (savingThrowFailed)
+                string ability = FirstLetterUpper(SavingThrow!);
+                int savingThrowResult = target.SavingThrow(ability);
+                int totalDamage;
+                bool savingThrowFailed = false;
+                // If the spell caster ability is higher than the result the target gets the full damage
+                if (savingThrowResult > SpellCasterAbility(spellCaster, ability))
                 {
-                    // Search at the ConditionService class for the method corresponding the condition
-                    ConditionsService cs = new();
-                    cs.ApplyCondition(Condition, target);
+                    Console.WriteLine("Saving Throw Successful");
+                }
+                else
+                {
+                    Console.WriteLine("Saving Throw Failed");
+                    savingThrowFailed = true;
+                }
+                //Verify if it was already made a spell attack to the target
+                if (!madeSpellAttack)
+                {
+                    // Depending if it passed the saving throw, takes full damage or half damage
+                    totalDamage = savingThrowFailed ? SpellDamage!.DamageRoll(false) : SpellDamage!.DamageRoll(false) / 2;
+                    Console.WriteLine($"Damage = {totalDamage}");
+                    // Subtracts the target total HitPoints with the damage taken
+                    target.HitPoints -= totalDamage;
+                    // Shows actual HitPoints total from target
+                    Console.WriteLine($"Actual HP from {target.Name} = {target.HitPoints}");
+                    // Set Unconsciuous if the HP gets to 0
+                    Character.SetUnconscious(target);
+                }
+                // If the spell has a condition, apply on the target
+                if (Condition != Conditions.None)
+                {
+                    // Verify if it failed on the saving throw
+                    if (savingThrowFailed)
+                    {
+                        // Search at the ConditionService class for the method corresponding the condition
+                        ConditionsService cs = new();
+                        cs.ApplyCondition(Condition, target);
+                    }
                 }
             }
         }
