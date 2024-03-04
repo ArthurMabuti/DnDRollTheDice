@@ -13,6 +13,7 @@ internal class PlayerCharacter : Character
 
     public async Task ChooseActionAsync<T>(List<T> allCharacters) where T : Character
     {
+        Console.Clear();
         Console.WriteLine($"** {Name}' turn **");
         Console.WriteLine("Which action do you want to use to attack?");
         ActionList();
@@ -23,6 +24,7 @@ internal class PlayerCharacter : Character
                 MakingAnAttack(allCharacters, null);
                 break;
             case "spell casting":
+                Console.Clear();
                 SpellsLevelList();
                 string spellLevel = Console.ReadLine()!.ToLower();
                 if (spellLevel == "cantrip") spellLevel = "0";
@@ -47,8 +49,9 @@ internal class PlayerCharacter : Character
         Console.WriteLine("Spell Casting");
     }
 
-    private void SpellsLevelList()
+    private static void SpellsLevelList()
     {
+        Console.Clear();
         Console.WriteLine(@"Choose a spell level:
 Cantrip
 Level 1
@@ -58,6 +61,7 @@ Level 3");
 
     private async Task ShowListOfSpells<T>(int level, List<T> allCharacters) where T: Character
     {
+        Console.Clear();
         await GetSpells(level);
         Console.WriteLine("Which spell do you want to use?");
         foreach (var spell in KnownSpells!)
@@ -68,11 +72,12 @@ Level 3");
         string spellName = Console.ReadLine()!.ToLower();
         Spells chosenSpell = KnownSpells.Find(spl => spl.Name!.Equals(spellName, StringComparison.CurrentCultureIgnoreCase))!;
         chosenSpell.CastingSpell(this, allCharacters);
+        KnownSpells.Clear();
     }
 
     private async Task GetSpells(int level)
     {
-        ApiService api = new ApiService();
+        ApiService api = new();
         SpellList? spellList = await api.GetSpellListFromApiAsync(level, ClassInformation!.Name!);
         foreach(var spell in spellList!.Spells!)
         {

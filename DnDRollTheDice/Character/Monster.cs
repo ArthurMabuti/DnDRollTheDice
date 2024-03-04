@@ -45,7 +45,7 @@ internal class Monster : Character
         return attackOption;
     }
 
-    public void MultiAttack(Character character)
+    public void MultiAttack(Character target)
     {
         int numberOfAttacks = 0;
         List<MultiAttackActions>? multiAttackActions = Actions.Find(act => act.Name == "Multiattack")!.MultiAttackActions;
@@ -61,8 +61,8 @@ internal class Monster : Character
             numberOfAttacks = multiAttackInformation.MultiAttackCount;
             while (numberOfAttacks > 0)
             {
-                int attackRoll = AttackRoll(attackAction.Name);
-                DealingDamage(character, attackAction.Name!, attackRoll);
+                int attackRoll = AttackRoll(target, attackAction.Name);
+                DealingDamage(target, attackAction.Name!, attackRoll);
                 numberOfAttacks--;
             }
         }

@@ -22,7 +22,7 @@ internal class Roll
     public static int DisadvantageDiceRoll()
     {
         // Return the lower DiceRoll
-        Console.WriteLine("Disadvantage Dice Roll");
+        Console.WriteLine("* Disadvantage Dice Roll *");
         int dice1 = DiceRoll(1, 20);
         int dice2 = DiceRoll(1, 20);
         Console.WriteLine($"Dice 1 = {dice1} | Dice 2 = {dice2}");
@@ -35,7 +35,7 @@ internal class Roll
     public static int AdvantageDiceRoll()
     {
         // Return the higher DiceRoll
-        Console.WriteLine("Advantage Dice Roll");
+        Console.WriteLine("* Advantage Dice Roll *");
         int dice1 = DiceRoll(1, 20);
         int dice2 = DiceRoll(1, 20);
         Console.WriteLine($"Dice 1 = {dice1} | Dice 2 = {dice2}");
