@@ -10,13 +10,13 @@ internal class ConditionsService
 
         if (method != null)
         {
-            method.Invoke(this, new object[] { character });
+            method.Invoke(this, [character]);
             character.Conditions!.Add(condition);
             Console.WriteLine($"{character.Name} is {condition}");
         }
         else
         {
-            Console.WriteLine($"Método para aplicar a condição {condition} não encontrado.");
+            Console.WriteLine($"Method to apply the {condition} condition not found.");
         }
     }
     public static void ApplyPoisonedCondition(Character character)
