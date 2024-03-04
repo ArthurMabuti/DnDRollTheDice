@@ -43,7 +43,7 @@ internal partial class Spells
         if (MakeSpellAttack)
         {
             // Stores the diceRoll result into attackRoll and make an attack depending on the result
-            int attackRoll = spellCaster.AttackRoll(null, this);
+            int attackRoll = spellCaster.AttackRoll(target, null, this);
             spellCaster.DealingDamage(target, Name!, attackRoll, this);
             // Confirms that the spell attack was made
             madeSpellAttack = true;
@@ -62,6 +62,7 @@ internal partial class Spells
                 int savingThrowResult = target.SavingThrow(ability);
                 int totalDamage;
                 bool savingThrowFailed = false;
+                
                 // If the spell caster ability is higher than the result the target gets the full damage
                 if (savingThrowResult > SpellCasterAbility(spellCaster, ability))
                 {
@@ -72,8 +73,8 @@ internal partial class Spells
                     Console.WriteLine("Saving Throw Failed");
                     savingThrowFailed = true;
                 }
-                //Verify if it was already made a spell attack to the target
-                if (!madeSpellAttack)
+                //Verify if it was already made a spell attack to the target and there's damage to be applied
+                if (!madeSpellAttack && SpellDamage != null)
                 {
                     // Depending if it passed the saving throw, takes full damage or half damage
                     totalDamage = savingThrowFailed ? SpellDamage!.DamageRoll(false) : SpellDamage!.DamageRoll(false) / 2;
@@ -98,6 +99,7 @@ internal partial class Spells
                 }
             }
         }
+        Console.ReadKey();
     }
 
     private int SpellCasterAbility(Character spellCaster, string ability)
@@ -167,7 +169,8 @@ internal partial class Spells
     private static partial Regex DamageDiceRegex();
 }
 
-//TODO Implement the use of saving throw and applying condition using the Ray of Sickness 1st level spell [OK]
+//TODO Implement the use of saving throw and applying poisoned condition using the Ray of Sickness 1st level spell [OK]
+//TODO Implement the use of saving throw and applying blinded condition using the Color Spray 1st level spell []
 //TODO Add other spells that are being removed
 /*
 Spell Types:
