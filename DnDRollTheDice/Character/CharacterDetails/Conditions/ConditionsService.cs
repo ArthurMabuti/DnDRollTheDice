@@ -10,18 +10,24 @@ internal class ConditionsService
 
         if (method != null)
         {
-            method.Invoke(this, new object[] { character });
+            method.Invoke(this, [character]);
             character.Conditions!.Add(condition);
             Console.WriteLine($"{character.Name} is {condition}");
         }
         else
         {
-            Console.WriteLine($"Método para aplicar a condição {condition} não encontrado.");
+            Console.WriteLine($"Method to apply the {condition} condition not found.");
         }
     }
     public static void ApplyPoisonedCondition(Character character)
     {
-        // Implementação para aplicar a condição "Poisoned" ao personagem
+        // Implementation to apply the "Poisoned" condition to the character
+        character.RollType = DiceRolls.RollType.Disadvantage;
+    }
+
+    public static void ApplyBlindedCondition(Character character)
+    {
+        // Implementation to apply the "Blinded" condition to the character
         character.RollType = DiceRolls.RollType.Disadvantage;
     }
 
