@@ -63,6 +63,7 @@ internal class Character
 
     public int SavingThrow(string ability)
     {
+        Console.WriteLine($"{Name} has to pass a {ability} saving throw");
         int rollValue = Roll.DiceRoll(1, 20);
         int finalResult = rollValue + ModifierValue(AbilityScores[ability]);
         Console.WriteLine($"The dice roll from {Name} for the saving throw was {finalResult}");
