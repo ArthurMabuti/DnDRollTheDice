@@ -167,12 +167,12 @@ internal partial class Spells
     private static partial Regex DamageDiceRegex();
 }
 
-//TODO Implement the use of saving throw and applying condition using the Ray of Sickness 1st level spell []
+//TODO Implement the use of saving throw and applying condition using the Ray of Sickness 1st level spell [OK]
 //TODO Add other spells that are being removed
 /*
 Spell Types:
 Offensive = SpellAttack|SavingThrow + Damage [OK]
 Control = SavingThrow + Condition [OK]
 Automatic = Damage+Condition (Sleep) [] | Damage (Magic Missile) []
-Healing = HitPoints []
+Healing = HitPoints [] | Temporary HitPoints []
 */
