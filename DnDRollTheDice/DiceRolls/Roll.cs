@@ -22,12 +22,26 @@ internal class Roll
     public static int DisadvantageDiceRoll()
     {
         // Return the lower DiceRoll
-        return Math.Min(DiceRoll(1, 20), DiceRoll(1, 20));
+        Console.WriteLine("Disadvantage Dice Roll");
+        int dice1 = DiceRoll(1, 20);
+        int dice2 = DiceRoll(1, 20);
+        Console.WriteLine($"Dice 1 = {dice1} | Dice 2 = {dice2}");
+        int lowerDice = (dice1 < dice2) ? dice1 : dice2;
+        Console.WriteLine("It will be used the lower dice:");
+        Console.WriteLine($"Result = {lowerDice}");
+        return lowerDice;
     }
 
     public static int AdvantageDiceRoll()
     {
         // Return the higher DiceRoll
-        return Math.Max(DiceRoll(1, 20), DiceRoll(1, 20));
+        Console.WriteLine("Advantage Dice Roll");
+        int dice1 = DiceRoll(1, 20);
+        int dice2 = DiceRoll(1, 20);
+        Console.WriteLine($"Dice 1 = {dice1} | Dice 2 = {dice2}");
+        int higherDice = (dice1 > dice2) ? dice1 : dice2;
+        Console.WriteLine("It will be used the higher dice:");
+        Console.WriteLine($"Result = {higherDice}");
+        return higherDice;
     }
 }

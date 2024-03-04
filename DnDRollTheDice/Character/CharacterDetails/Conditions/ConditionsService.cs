@@ -1,9 +1,28 @@
-﻿namespace DnDRollTheDice.Character.CharacterDetails.Conditions;
+﻿using System.Reflection;
+
+namespace DnDRollTheDice.Character.CharacterDetails.Conditions;
 internal class ConditionsService
 {
+    public void ApplyCondition(Conditions condition, Character character)
+    {
+        string methodName = $"Apply{condition}Condition";
+        MethodInfo method = GetType().GetMethod(methodName)!;
+
+        if (method != null)
+        {
+            method.Invoke(this, new object[] { character });
+            character.Conditions!.Add(condition);
+            Console.WriteLine($"{character.Name} is {condition}");
+        }
+        else
+        {
+            Console.WriteLine($"Método para aplicar a condição {condition} não encontrado.");
+        }
+    }
     public static void ApplyPoisonedCondition(Character character)
     {
         // Implementação para aplicar a condição "Poisoned" ao personagem
+        character.RollType = DiceRolls.RollType.Disadvantage;
     }
 
     public static void RemoveFrightenedCondition(Character character)

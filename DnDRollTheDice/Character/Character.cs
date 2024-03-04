@@ -47,7 +47,7 @@ internal class Character
         CombatSystem.AddCharacter(this);
     }
 
-    public static int ModifierValue(int abilityScore)
+    public int ModifierValue(int abilityScore)
     {
         double modifier = (double)(abilityScore - 10) / 2;
         return (int)Math.Floor(modifier);
@@ -58,6 +58,14 @@ internal class Character
         int rollValue = Roll.DiceRoll(1, 20);
         int finalResult = rollValue + ModifierValue(AbilityScores["Dexterity"]);
         Console.WriteLine($"The dice roll from {Name} for initiative was {finalResult}");
+        return finalResult;
+    }
+
+    public int SavingThrow(string ability)
+    {
+        int rollValue = Roll.DiceRoll(1, 20);
+        int finalResult = rollValue + ModifierValue(AbilityScores[ability]);
+        Console.WriteLine($"The dice roll from {Name} for the saving throw was {finalResult}");
         return finalResult;
     }
 
@@ -77,17 +85,18 @@ internal class Character
         }
     }
 
-    public int AttackRoll(Character character, string? actionName = null, Spells? spell = null)
+    public int AttackRoll(string? actionName = null, Spells? spell = null)
     {
+        // Verifies if the dice roll will be made with normally or with advantage or disadvantage and makes the roll
         int diceRolled = DetermineDiceRoll();
 
         int attackBonus;
         int attackValue;
-        if(character is Monster monster)
+        if(this is Monster monster)
         {
             attackBonus = monster.SelectMonsterAction(actionName!).AttackBonus;
             attackValue = diceRolled + attackBonus;
-            Console.WriteLine($"Attack Roll = Dice({diceRolled}) + AttackBobus({attackBonus}) = {attackValue}");
+            Console.WriteLine($"Attack Roll = Dice({diceRolled}) + AttackBonus({attackBonus}) = {attackValue}");
         }
         else
         {
@@ -116,9 +125,16 @@ internal class Character
         return rangeSkillBased;
     }
 
+    private int BestFightingSkill()
+    {
+        int fightingSkill = (AbilityScores["Strength"] > AbilityScores["Dexterity"]) ? AbilityScores["Strength"] : AbilityScores["Dexterity"];
+        return fightingSkill;
+    }
+
     private int AssignAttackBonus(Spells? spell)
     {
-        int attackBonus = (spell != null) ? ModifierValue(AbilityScores[ClassInformation!.SpellCastingAbility!]) : RangeSkillBased();
+        string spellCastingAbility = ClassInformation!.SpellCastingAbility!;
+        int attackBonus = (spell != null) ? ModifierValue(AbilityScores[spellCastingAbility]) : RangeSkillBased();
         return attackBonus;
     }
 
@@ -131,38 +147,48 @@ internal class Character
         return false;
     }
 
-    public void DealingDamage<T>(List<T> allCharacters, Spells? spell = null) where T : Character
+    public void MakingAnAttack<T>(List<T> allCharacters, Spells? spell = null) where T : Character
     {
-        Character? character = this;
-
-        if(character is Monster) Console.WriteLine($"** {Name}' turn **");
+        // If monster, shows it's name
+        if(this is Monster) Console.WriteLine($"** {Name}'s turn **");
+        // Choose in which character will occur the action
         Character target = ChooseTarget(allCharacters);
-        string? attackSource = AttackSource(character!, spell);
+        // Choose the name of the action
+        string? attackSource = AttackSource(spell);
 
+        // If a monster chose multiattack it makes the combination of attacks from it's class
         if(attackSource.ToLower() == "multiattack")
         {
-            Monster? monster = character as Monster;
+            Monster? monster = this as Monster;
             monster!.MultiAttack(target);
         }
+        // Else makes an attack based the name of the action
         else
-        {
-            int attackRoll = AttackRoll(character!, attackSource, spell);
-            MakingAnAttack(this, target, attackSource, attackRoll, spell);
+        { 
+            // Makes a dice roll to try hit the target
+            int attackRoll = AttackRoll(attackSource, spell);
+            // Makes the attack based on the chose action
+            DealingDamage(target, attackSource, attackRoll, spell);
         }
     }
 
-    public void MakingAnAttack(Character attacker, Character target, string actionName, int attackRoll, Spells? spell = null)
+    public void DealingDamage(Character target, string actionName, int attackRoll, Spells? spell = null)
     {
+        // Write which action is happening to whom
         Console.WriteLine($"Making a {actionName} attack against {target.Name!}!");
+        // If the dice attackRoll surpasses the Armor Class from the Target, do the damage
         if (ReachArmorClass(target, attackRoll))
         {
             Console.WriteLine("Attack successful!");
-
-            int damage = CalculateDamage(attacker!, actionName, attackRoll, spell);
+            // Sums the many damage dices roll + ability scores
+            int damage = CalculateDamage(actionName, attackRoll, spell);
 
             Console.WriteLine($"Damage = {damage}");
+            // Subtracts the target total HitPoints with the damage taken
             target.HitPoints -= damage;
+            // Shows actual HitPoints total from target
             Console.WriteLine($"Actual HP from {target.Name} = {target.HitPoints}");
+            // Set Unconsciuous if the HP gets to 0
             SetUnconscious(target);
         }
         else
@@ -171,34 +197,39 @@ internal class Character
         }
     }
 
-    protected string AttackSource(Character character, Spells? spell)
+    protected string AttackSource(Spells? spell)
     {
-        if (character is Monster monster)
+        // Returns the weapon/spell name or, if a monster, the action name
+        if (this is Monster monster)
             return monster.ChooseMonsterAction();
         return (spell == null) ? Weapon.Name! : spell.Name!;
     }
 
-    protected int CalculateDamage(Character character, string actionName, int attackRoll, Spells? spell)
+    protected int CalculateDamage(string actionName, int attackRoll, Spells? spell)
     {
-        if(character is Monster monster)
+        //If is a monster, gets the damage dices from its action and makes the rolls
+        if(this is Monster monster)
             return monster.SelectMonsterAction(actionName).Damage!.DamageRoll(CriticalHit(attackRoll));
+        // Else gets the damage dice from weapon/spell and makes the dice rolls
         return (spell == null)
             ? Weapon.Damage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill())
             : spell.SpellDamage!.DamageRoll(CriticalHit(attackRoll)) + ModifierValue(BestFightingSkill());
     }
 
-    public T ChooseTarget<T>(List<T> allCharacters) where T : Character
+    public static T ChooseTarget<T>(List<T> allCharacters) where T : Character
     {
-
-        T target = null!;
         Console.WriteLine("Which target do you want to attack?");
         foreach (Character character in allCharacters)
         {
+            //If target it's not unconscious, show his name for selection
             if(!character.IsUnconscious())
                 Console.WriteLine(character.Name);
         }
+        // User writes the name of the target
         string targetName = Console.ReadLine()!;
-        target = allCharacters.Find(cha => cha.Name == targetName)!;
+        // Find the target in the list of all created targets
+        T target = allCharacters.Find(cha => cha.Name == targetName)!;
+        // Return the Character class
         return target;
     }
 
@@ -211,13 +242,7 @@ internal class Character
         return false;
     }
 
-    public int BestFightingSkill()
-    {
-        int fightingSkill = (AbilityScores["Strength"] > AbilityScores["Dexterity"]) ? AbilityScores["Strength"] : AbilityScores["Dexterity"];
-        return fightingSkill;
-    }
-
-    public void SetUnconscious(Character character)
+    public static void SetUnconscious(Character character)
     {
         if(character.HitPoints <= 0) character.Unconscious = true;
     }
@@ -235,19 +260,6 @@ internal class Character
             ClassInformation = classList?.Class?.First();
         }
     }
-
-    public void ApplyCondition(Conditions condition)
-    {
-        Conditions!.Add(condition);
-        Console.WriteLine($"{Name} is now {condition}.");
-    }
-
-    public void RemoveCondition(Conditions condition)
-    {
-        if (Conditions!.Contains(condition))
-        {
-            Conditions.Remove(condition);
-            Console.WriteLine($"{Name} is no longer {condition}.");
-        }
-    }
+    //TODO Separate methods from Spells, Weapon and Monster Actions. 
+    //If it is a Weapon attack, the methods about damage shall be on the class Weapon and vice-versa
 }

@@ -20,7 +20,7 @@ internal class PlayerCharacter : Character
         switch (option)
         {
             case "weapon attack":
-                DealingDamage(allCharacters, null);
+                MakingAnAttack(allCharacters, null);
                 break;
             case "spell casting":
                 SpellsLevelList();
@@ -67,7 +67,7 @@ Level 3");
         }
         string spellName = Console.ReadLine()!.ToLower();
         Spells chosenSpell = KnownSpells.Find(spl => spl.Name!.Equals(spellName, StringComparison.CurrentCultureIgnoreCase))!;
-        DealingDamage(allCharacters, chosenSpell);
+        chosenSpell.CastingSpell(this, allCharacters);
     }
 
     private async Task GetSpells(int level)

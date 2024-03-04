@@ -11,8 +11,8 @@ PlayerCharacter brocc = new()
 {
     Name = "Brocc",
     Class = "Wizard",
-    Proficiency = 2,
-    HitPoints = 10
+    Proficiency = 3,
+    HitPoints = 50
 };
 await brocc.AssignClassInformationAsync(apiService);
 brocc.ArmorClass = new ArmorClass() { Type = "Armor", Value = 18, Armor = new List<Armor>() };
@@ -33,8 +33,8 @@ brocc.CharacterWithRandomAbilityScore();
 
 #region Testing Monster API
 
-Monster? monster1 = await apiService.GetMonsterFromApiAsync("kobold");
-Monster? monster2 = await apiService.GetMonsterFromApiAsync("goblin");
+Monster? monster1 = await apiService.GetMonsterFromApiAsync("griffon");
+//Monster? monster2 = await apiService.GetMonsterFromApiAsync("goblin");
 
 //Monster? monster = new();
 //monster.UseManualStatus();
