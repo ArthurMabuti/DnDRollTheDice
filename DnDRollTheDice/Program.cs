@@ -11,7 +11,7 @@ PlayerCharacter brocc = new()
 {
     Name = "Brocc",
     Class = "Wizard",
-    Proficiency = 20,
+    Proficiency = 3,
     HitPoints = 50
 };
 await brocc.AssignClassInformationAsync(apiService);
