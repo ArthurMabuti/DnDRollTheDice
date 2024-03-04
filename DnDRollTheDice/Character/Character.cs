@@ -1,6 +1,7 @@
 ﻿using DnDRollTheDice.Character.CharacterClass;
 using DnDRollTheDice.Character.CharacterDetails;
 using DnDRollTheDice.Character.CharacterDetails.Conditions;
+using ConditionClass = DnDRollTheDice.Character.CharacterDetails.Conditions;
 using DnDRollTheDice.Character.CharacterItems;
 using DnDRollTheDice.Character.CharacterSpells;
 using DnDRollTheDice.DiceRolls;
@@ -86,10 +87,13 @@ internal class Character
         }
     }
 
-    public int AttackRoll(string? actionName = null, Spells? spell = null)
+    public int AttackRoll(Character target, string? actionName = null, Spells? spell = null)
     {
+        // Verifies if the target being hit have a condition that creates advantage|disadvantage when attacking
+        RollType rollType = VerifyAdvantage(target);
+
         // Verifies if the dice roll will be made with normally or with advantage or disadvantage and makes the roll
-        int diceRolled = DetermineDiceRoll();
+        int diceRolled = DetermineDiceRoll(rollType);
 
         int attackBonus;
         int attackValue;
@@ -118,6 +122,31 @@ internal class Character
             RollType.Advantage => Roll.AdvantageDiceRoll(),
             _ => 0,
         };
+    }
+
+    private RollType VerifyAdvantage(Character target)
+    {
+        // Created list of the conditions that create an advantage attack roll
+        List<Conditions> advantageConditions = [ConditionClass.Conditions.Blinded, ConditionClass.Conditions.Paralyzed, ConditionClass.Conditions.Petrified, ConditionClass.Conditions.Restrained, ConditionClass.Conditions.Stunned, ConditionClass.Conditions.Unconscious];
+
+        // Created list of the conditions that create an disadvantage attack roll
+        List<Conditions> disadvantageConditions = [ConditionClass.Conditions.Invisible];
+
+        // Using Intersect, look if the target Conditions match with the advantageConditions list, if there's any item in the list, give advantage
+        if (target.Conditions!.Count != 0 && target.Conditions!.Intersect(advantageConditions).Any())
+        {
+            // If the attacking character already has disadvantage, turns it into a normal attack roll
+            if (RollType == RollType.Disadvantage) return RollType.Normal;
+            // Else gives advantage to the attack
+            else return RollType.Advantage;
+        }
+        // Using Intersect, look if the target Conditions match with the disadvantageConditions list, if there's any item in the list, give disadvantage
+        if (target.Conditions!.Count != 0 && target.Conditions!.Intersect(disadvantageConditions).Any())
+        {
+            return RollType.Disadvantage;
+        }
+        // If the condition hasn't been attended just maintain the same rolltype
+        return RollType;
     }
 
     private int RangeSkillBased()
@@ -150,6 +179,7 @@ internal class Character
 
     public void MakingAnAttack<T>(List<T> allCharacters, Spells? spell = null) where T : Character
     {
+        Console.Clear();
         // If monster, shows it's name
         if(this is Monster) Console.WriteLine($"** {Name}'s turn **");
         // Choose in which character will occur the action
@@ -167,7 +197,7 @@ internal class Character
         else
         { 
             // Makes a dice roll to try hit the target
-            int attackRoll = AttackRoll(attackSource, spell);
+            int attackRoll = AttackRoll(target, attackSource, spell);
             // Makes the attack based on the chose action
             DealingDamage(target, attackSource, attackRoll, spell);
         }
@@ -196,6 +226,7 @@ internal class Character
         {
             Console.WriteLine("Attack missed!");
         }
+        Console.ReadKey();
     }
 
     protected string AttackSource(Spells? spell)
