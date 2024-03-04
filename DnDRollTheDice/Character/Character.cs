@@ -109,9 +109,9 @@ internal class Character
         return attackValue;
     }
 
-    private int DetermineDiceRoll()
+    private int DetermineDiceRoll(RollType rollType)
     {
-        return RollType switch
+        return rollType switch
         {
             RollType.Normal => Roll.DiceRoll(1, 20),
             RollType.Disadvantage => Roll.DisadvantageDiceRoll(),
