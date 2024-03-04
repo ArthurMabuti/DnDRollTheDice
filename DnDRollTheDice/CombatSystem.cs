@@ -17,6 +17,7 @@ internal class CombatSystem
         List<PlayerCharacter> allPlayerCharacters = GetAllCharactersOfType<PlayerCharacter>();
 
         OrderCharactersByInitiative();
+        Console.ReadKey();
 
         do
         {
