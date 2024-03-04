@@ -24,6 +24,10 @@ internal class ConditionsService
         // Implementation to apply the "Poisoned" condition to the character
         character.RollType = DiceRolls.RollType.Disadvantage;
     }
+
+    public static void ApplyBlindedCondition(Character character)
+    {
+        // Implementation to apply the "Blinded" condition to the character
         character.RollType = DiceRolls.RollType.Disadvantage;
     }
 
