@@ -3,16 +3,19 @@
 namespace DnDRollTheDice.Character.CharacterDetails.Conditions;
 internal class ConditionsService
 {
-    public void ApplyCondition(Conditions condition, Character character)
+    public void ApplyCondition(Conditions condition, Character target, Character spellCaster)
     {
         string methodName = $"Apply{condition}Condition";
         MethodInfo method = GetType().GetMethod(methodName)!;
+        List<Conditions> unattackableConditions = [Conditions.Charmed, Conditions.Frightened];
 
         if (method != null)
         {
-            method.Invoke(this, [character]);
-            character.Conditions!.Add(condition);
-            Console.WriteLine($"{character.Name} is {condition}");
+            // If condition has a unattackable target send spellcaster information
+            if(unattackableConditions.Contains(condition)) method.Invoke(this, [target, spellCaster]);
+            else method.Invoke(this, [target]);
+            target.Conditions!.Add(condition);
+            Console.WriteLine($"{target.Name} is {condition}");
         }
         else
         {
