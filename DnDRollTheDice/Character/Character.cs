@@ -94,6 +94,13 @@ internal class Character
         // Verifies if the target being hit have a condition that creates advantage|disadvantage when attacking
         RollType rollType = VerifyAdvantage(target);
 
+        // Verifies if the target is attackable
+        if (UnattackableTarget.Contains(target))
+        {
+            Console.WriteLine("Can't attack your charmer!"); 
+            return -1;
+        }
+
         // Verifies if the dice roll will be made with normally or with advantage or disadvantage and makes the roll
         int diceRolled = DetermineDiceRoll(rollType);
 
