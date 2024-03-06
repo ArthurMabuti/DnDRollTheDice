@@ -36,6 +36,7 @@ internal class Character
     public List<Spells> KnownSpells { get; set; }
     public RollType RollType { get; set; } = RollType.Normal;
     public List<Conditions>? Conditions { get; private set; }
+    public List<Character> UnattackableTarget { get; set; }
 
     public Character()
     {
@@ -45,6 +46,7 @@ internal class Character
         armorClass = [];
         KnownSpells = [];
         Conditions = [];
+        UnattackableTarget = [];
         CombatSystem.AddCharacter(this);
     }
 
