@@ -11,7 +11,7 @@ PlayerCharacter brocc = new()
 {
     Name = "Brocc",
     Class = "Wizard",
-    Proficiency = 3,
+    Proficiency = 20,
     HitPoints = 25
 };
 PlayerCharacter njarsen = new()
