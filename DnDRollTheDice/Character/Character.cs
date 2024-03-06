@@ -64,9 +64,9 @@ internal class Character
         return finalResult;
     }
 
-    public int SavingThrow(string ability)
+    public int SavingThrow(string ability, int spellCasterAbility)
     {
-        Console.WriteLine($"{Name} has to pass a {ability} saving throw");
+        Console.WriteLine($"{Name} has to pass a {ability} saving throw. DC = {spellCasterAbility}");
         int rollValue = Roll.DiceRoll(1, 20);
         int finalResult = rollValue + ModifierValue(AbilityScores[ability]);
         Console.WriteLine($"The dice roll from {Name} for the saving throw was {finalResult}");
