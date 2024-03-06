@@ -85,7 +85,7 @@ Level 3");
     private async Task GetSpells(int level)
     {
         ApiService api = new();
-        SpellList? spellList = await api.GetSpellListFromApiAsync(level, ClassInformation!.Name!);
+        SpellList? spellList = await ApiService.GetSpellListFromApiAsync(level, ClassInformation!.Name!);
         foreach(var spell in spellList!.Spells!)
         {
             KnownSpells.Add(spell);

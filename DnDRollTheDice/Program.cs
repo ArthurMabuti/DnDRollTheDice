@@ -11,22 +11,12 @@ PlayerCharacter brocc = new()
 {
     Name = "Brocc",
     Class = "Wizard",
-    Proficiency = 20,
-    HitPoints = 25
-};
-PlayerCharacter njarsen = new()
-{
-    Name = "Njarsen",
-    Class = "Fighter",
-    Proficiency = 3,
-    HitPoints = 50
+    Proficiency = 2,
+    HitPoints = 10
 };
 await brocc.AssignClassInformationAsync(apiService);
-await njarsen.AssignClassInformationAsync(apiService);
-brocc.ArmorClass = new ArmorClass() { Type = "Clothes", Value = 13, Armor = [] };
-njarsen.ArmorClass = new ArmorClass() { Type = "Half-Plate", Value = 17, Armor = [] };
+brocc.ArmorClass = new ArmorClass() { Type = "Armor", Value = 18, Armor = new List<Armor>() };
 brocc.CharacterWithRandomAbilityScore();
-njarsen.CharacterWithRandomAbilityScore();
 
 //Testing Dice Roll
 //Fireball
@@ -43,8 +33,8 @@ njarsen.CharacterWithRandomAbilityScore();
 
 #region Testing Monster API
 
-Monster? monster1 = await apiService.GetMonsterFromApiAsync("griffon");
-Monster? monster2 = await apiService.GetMonsterFromApiAsync("hill-giant");
+Monster? monster1 = await ApiService.GetMonsterFromApiAsync("kobold");
+Monster? monster2 = await ApiService.GetMonsterFromApiAsync("goblin");
 
 //Monster? monster = new();
 //monster.UseManualStatus();
@@ -54,10 +44,8 @@ Monster? monster2 = await apiService.GetMonsterFromApiAsync("hill-giant");
 
 #region Testing Weapon API
 
-Weapon? quarterstaff = await apiService.GetWeaponFromApiAsync("quarterstaff");
-Weapon? greatsword = await apiService.GetWeaponFromApiAsync("greatsword");
+Weapon? quarterstaff = await ApiService.GetWeaponFromApiAsync("quarterstaff");
 brocc.Weapon = quarterstaff!;
-njarsen.Weapon = greatsword!;
 //Console.WriteLine(bruenor.ReachArmorClass(monster!));
 
 #endregion
@@ -100,7 +88,6 @@ njarsen.Weapon = greatsword!;
 #region Testing Spell Attack
 {
     brocc.ShowAbilityScores();
-    njarsen.ShowAbilityScores();
     CombatSystem.EngageInBattle();
 }
 
