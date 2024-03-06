@@ -11,12 +11,22 @@ PlayerCharacter brocc = new()
 {
     Name = "Brocc",
     Class = "Wizard",
-    Proficiency = 2,
-    HitPoints = 10
+    Proficiency = 20,
+    HitPoints = 25
+};
+PlayerCharacter njarsen = new()
+{
+    Name = "Njarsen",
+    Class = "Fighter",
+    Proficiency = 3,
+    HitPoints = 50
 };
 await brocc.AssignClassInformationAsync(apiService);
-brocc.ArmorClass = new ArmorClass() { Type = "Armor", Value = 18, Armor = new List<Armor>() };
+await njarsen.AssignClassInformationAsync(apiService);
+brocc.ArmorClass = new ArmorClass() { Type = "Clothes", Value = 13, Armor = [] };
+njarsen.ArmorClass = new ArmorClass() { Type = "Half-Plate", Value = 17, Armor = [] };
 brocc.CharacterWithRandomAbilityScore();
+njarsen.CharacterWithRandomAbilityScore();
 
 //Testing Dice Roll
 //Fireball
@@ -33,8 +43,8 @@ brocc.CharacterWithRandomAbilityScore();
 
 #region Testing Monster API
 
-Monster? monster1 = await ApiService.GetMonsterFromApiAsync("kobold");
-Monster? monster2 = await ApiService.GetMonsterFromApiAsync("goblin");
+Monster? monster1 = await ApiService.GetMonsterFromApiAsync("griffon");
+Monster? monster2 = await ApiService.GetMonsterFromApiAsync("hill-giant");
 
 //Monster? monster = new();
 //monster.UseManualStatus();
@@ -45,7 +55,9 @@ Monster? monster2 = await ApiService.GetMonsterFromApiAsync("goblin");
 #region Testing Weapon API
 
 Weapon? quarterstaff = await ApiService.GetWeaponFromApiAsync("quarterstaff");
+Weapon? greatsword = await ApiService.GetWeaponFromApiAsync("greatsword");
 brocc.Weapon = quarterstaff!;
+njarsen.Weapon = greatsword!;
 //Console.WriteLine(bruenor.ReachArmorClass(monster!));
 
 #endregion
@@ -75,7 +87,7 @@ brocc.Weapon = quarterstaff!;
 
 #region Testing Other API
 
-//SpellList? listOfSpells = await apiService.GetSpellListFromApiAsync(0, brocc.Class);
+//SpellList? listOfSpells = await ApiService.GetSpellListFromApiAsync(0, brocc.Class);
 
 //foreach (var spell in listOfSpells!.Spells!)
 //{
@@ -88,6 +100,7 @@ brocc.Weapon = quarterstaff!;
 #region Testing Spell Attack
 {
     brocc.ShowAbilityScores();
+    njarsen.ShowAbilityScores();
     CombatSystem.EngageInBattle();
 }
 
