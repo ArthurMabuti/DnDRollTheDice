@@ -34,10 +34,10 @@ internal class ConditionsService
         target.RollType = DiceRolls.RollType.Disadvantage;
     }
 
-    public static void ApplyBlindedCondition(Character character)
+    public static void ApplyCharmedCondition(Character target, Character charmer)
     {
-        // Implementation to apply the "Blinded" condition to the character
-        character.RollType = DiceRolls.RollType.Disadvantage;
+        // Charmed creatures can't attack their charmer
+        target.UnattackableTarget.Add(charmer);
     }
 
     public static void RemoveFrightenedCondition(Character character)
