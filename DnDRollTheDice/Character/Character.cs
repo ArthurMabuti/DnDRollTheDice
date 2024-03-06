@@ -115,7 +115,7 @@ internal class Character
         return attackValue;
     }
 
-    private int DetermineDiceRoll(RollType rollType)
+    private static int DetermineDiceRoll(RollType rollType)
     {
         return rollType switch
         {
