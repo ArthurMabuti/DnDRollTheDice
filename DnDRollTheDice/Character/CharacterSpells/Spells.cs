@@ -104,12 +104,7 @@ internal partial class Spells
 
     private int SpellCasterAbility(Character spellCaster, string ability)
     {
-        return 8 + spellCaster.Proficiency + spellCaster.ModifierValue(spellCaster.AbilityScores[ability]);
-    }
-
-    public static string FirstLetterUpper(string text)
-    {
-        return char.ToUpper(text[0]) + text[1..];
+        return 8 + spellCaster.Proficiency + Character.ModifierValue(spellCaster.AbilityScores[ability]);
     }
 
     private Damage SpellDamageByDescription()
