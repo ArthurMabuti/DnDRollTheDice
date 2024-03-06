@@ -214,8 +214,15 @@ internal class Character
 
     public void DealingDamage(Character target, string actionName, int attackRoll, Spells? spell = null)
     {
+        if (attackRoll == -1)
+        {
+            Console.WriteLine("Attack Failed");
+            Console.ReadKey();
+        }
+        else
+        {
         // Write which action is happening to whom
-        Console.WriteLine($"Making a {actionName} attack against {target.Name!}!");
+            Console.WriteLine($"Making a {UtilityClass.FirstLetterUpper(actionName)} attack against {target.Name!}!");
         // If the dice attackRoll surpasses the Armor Class from the Target, do the damage
         if (ReachArmorClass(target, attackRoll))
         {
@@ -236,6 +243,7 @@ internal class Character
             Console.WriteLine("Attack missed!");
         }
         Console.ReadKey();
+    }
     }
 
     protected string AttackSource(Spells? spell)
