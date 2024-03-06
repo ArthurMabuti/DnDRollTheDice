@@ -221,29 +221,29 @@ internal class Character
         }
         else
         {
-        // Write which action is happening to whom
+            // Write which action is happening to whom
             Console.WriteLine($"Making a {UtilityClass.FirstLetterUpper(actionName)} attack against {target.Name!}!");
-        // If the dice attackRoll surpasses the Armor Class from the Target, do the damage
-        if (ReachArmorClass(target, attackRoll))
-        {
-            Console.WriteLine("Attack successful!");
-            // Sums the many damage dices roll + ability scores
-            int damage = CalculateDamage(actionName, attackRoll, spell);
+            // If the dice attackRoll surpasses the Armor Class from the Target, do the damage
+            if (ReachArmorClass(target, attackRoll))
+            {
+                Console.WriteLine("Attack successful!");
+                // Sums the many damage dices roll + ability scores
+                int damage = CalculateDamage(actionName, attackRoll, spell);
 
-            Console.WriteLine($"Damage = {damage}");
-            // Subtracts the target total HitPoints with the damage taken
-            target.HitPoints -= damage;
-            // Shows actual HitPoints total from target
-            Console.WriteLine($"Actual HP from {target.Name} = {target.HitPoints}");
-            // Set Unconsciuous if the HP gets to 0
-            SetUnconscious(target);
+                Console.WriteLine($"Damage = {damage}");
+                // Subtracts the target total HitPoints with the damage taken
+                target.HitPoints -= damage;
+                // Shows actual HitPoints total from target
+                Console.WriteLine($"Actual HP from {target.Name} = {target.HitPoints}");
+                // Set Unconsciuous if the HP gets to 0
+                SetUnconscious(target);
+            }
+            else
+            {
+                Console.WriteLine("Attack missed!");
+            }
+            Console.ReadKey();
         }
-        else
-        {
-            Console.WriteLine("Attack missed!");
-        }
-        Console.ReadKey();
-    }
     }
 
     protected string AttackSource(Spells? spell)
@@ -275,7 +275,9 @@ internal class Character
                 Console.WriteLine(character.Name);
         }
         // User writes the name of the target
-        string targetName = Console.ReadLine()!;
+        string targetName = Console.ReadLine()!.ToLower();
+        // Formats the name of the target to Upper first letters of each name
+        targetName = UtilityClass.FormatNameWithSpaces(targetName);
         // Find the target in the list of all created targets
         T target = allCharacters.Find(cha => cha.Name == targetName)!;
         // Return the Character class
