@@ -29,6 +29,7 @@ internal class Monster : Character
 
     public Actions SelectMonsterAction(string actionName)
     {
+        actionName = UtilityClass.FirstLetterUpper(actionName);
         Actions monsterAction = Actions.Find(act => act.Name == actionName)!;
         return monsterAction;
     }
@@ -47,16 +48,26 @@ internal class Monster : Character
 
     public void MultiAttack(Character target)
     {
+        // Writes which attacks are going to happen
+        string attackDescription = Actions.Find(act => act.Name == "Multiattack")!.Description!;
+        Console.WriteLine(attackDescription);
+
         int numberOfAttacks = 0;
+        // Store each attack in the multiattack action
         List<MultiAttackActions>? multiAttackActions = Actions.Find(act => act.Name == "Multiattack")!.MultiAttackActions;
+        // For each attack search in the Actions list and perform the correspond action
         foreach (var action in Actions)
         {
+            // Skip the multiattack action
             if (action.Name == "Multiattack") continue;
             
+            // Verifies if the action founded corresponds to the multiattack action
             MultiAttackActions multiAttackInformation = multiAttackActions!.Find(multiAct => multiAct.MultiAttackActionName == action.Name)!;
 
+            // If don't just skip that action
             if (multiAttackInformation == null) continue;
 
+            // Store the correct action and perform a attack the many times writed in multiAttackCount
             Actions attackAction = SelectMonsterAction(multiAttackInformation!.MultiAttackActionName!);
             numberOfAttacks = multiAttackInformation.MultiAttackCount;
             while (numberOfAttacks > 0)
