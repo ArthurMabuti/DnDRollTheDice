@@ -36,6 +36,7 @@ internal class Character
     public List<Spells> KnownSpells { get; set; }
     public RollType RollType { get; set; } = RollType.Normal;
     public List<Conditions>? Conditions { get; private set; }
+    public List<Character> UnattackableTarget { get; set; }
 
     public Character()
     {
@@ -45,10 +46,11 @@ internal class Character
         armorClass = [];
         KnownSpells = [];
         Conditions = [];
+        UnattackableTarget = [];
         CombatSystem.AddCharacter(this);
     }
 
-    public int ModifierValue(int abilityScore)
+    public static int ModifierValue(int abilityScore)
     {
         double modifier = (double)(abilityScore - 10) / 2;
         return (int)Math.Floor(modifier);
@@ -62,9 +64,9 @@ internal class Character
         return finalResult;
     }
 
-    public int SavingThrow(string ability)
+    public int SavingThrow(string ability, int spellCasterAbility)
     {
-        Console.WriteLine($"{Name} has to pass a {ability} saving throw");
+        Console.WriteLine($"{Name} has to pass a {ability} saving throw. DC = {spellCasterAbility}");
         int rollValue = Roll.DiceRoll(1, 20);
         int finalResult = rollValue + ModifierValue(AbilityScores[ability]);
         Console.WriteLine($"The dice roll from {Name} for the saving throw was {finalResult}");
@@ -92,6 +94,13 @@ internal class Character
         // Verifies if the target being hit have a condition that creates advantage|disadvantage when attacking
         RollType rollType = VerifyAdvantage(target);
 
+        // Verifies if the target is attackable
+        if (UnattackableTarget.Contains(target))
+        {
+            Console.WriteLine("Can't attack your charmer!"); 
+            return -1;
+        }
+
         // Verifies if the dice roll will be made with normally or with advantage or disadvantage and makes the roll
         int diceRolled = DetermineDiceRoll(rollType);
 
@@ -113,7 +122,7 @@ internal class Character
         return attackValue;
     }
 
-    private int DetermineDiceRoll(RollType rollType)
+    private static int DetermineDiceRoll(RollType rollType)
     {
         return rollType switch
         {
@@ -205,28 +214,36 @@ internal class Character
 
     public void DealingDamage(Character target, string actionName, int attackRoll, Spells? spell = null)
     {
-        // Write which action is happening to whom
-        Console.WriteLine($"Making a {actionName} attack against {target.Name!}!");
-        // If the dice attackRoll surpasses the Armor Class from the Target, do the damage
-        if (ReachArmorClass(target, attackRoll))
+        if (attackRoll == -1)
         {
-            Console.WriteLine("Attack successful!");
-            // Sums the many damage dices roll + ability scores
-            int damage = CalculateDamage(actionName, attackRoll, spell);
-
-            Console.WriteLine($"Damage = {damage}");
-            // Subtracts the target total HitPoints with the damage taken
-            target.HitPoints -= damage;
-            // Shows actual HitPoints total from target
-            Console.WriteLine($"Actual HP from {target.Name} = {target.HitPoints}");
-            // Set Unconsciuous if the HP gets to 0
-            SetUnconscious(target);
+            Console.WriteLine("Attack Failed");
+            Console.ReadKey();
         }
         else
         {
-            Console.WriteLine("Attack missed!");
+            // Write which action is happening to whom
+            Console.WriteLine($"Making a {UtilityClass.FirstLetterUpper(actionName)} attack against {target.Name!}!");
+            // If the dice attackRoll surpasses the Armor Class from the Target, do the damage
+            if (ReachArmorClass(target, attackRoll))
+            {
+                Console.WriteLine("Attack successful!");
+                // Sums the many damage dices roll + ability scores
+                int damage = CalculateDamage(actionName, attackRoll, spell);
+
+                Console.WriteLine($"Damage = {damage}");
+                // Subtracts the target total HitPoints with the damage taken
+                target.HitPoints -= damage;
+                // Shows actual HitPoints total from target
+                Console.WriteLine($"Actual HP from {target.Name} = {target.HitPoints}");
+                // Set Unconsciuous if the HP gets to 0
+                SetUnconscious(target);
+            }
+            else
+            {
+                Console.WriteLine("Attack missed!");
+            }
+            Console.ReadKey();
         }
-        Console.ReadKey();
     }
 
     protected string AttackSource(Spells? spell)
@@ -258,7 +275,9 @@ internal class Character
                 Console.WriteLine(character.Name);
         }
         // User writes the name of the target
-        string targetName = Console.ReadLine()!;
+        string targetName = Console.ReadLine()!.ToLower();
+        // Formats the name of the target to Upper first letters of each name
+        targetName = UtilityClass.FormatNameWithSpaces(targetName);
         // Find the target in the list of all created targets
         T target = allCharacters.Find(cha => cha.Name == targetName)!;
         // Return the Character class

@@ -58,8 +58,8 @@ internal partial class Spells
             }
             else
             {
-                string ability = FirstLetterUpper(SavingThrow!);
-                int savingThrowResult = target.SavingThrow(ability);
+                string ability = UtilityClass.FirstLetterUpper(SavingThrow!);
+                int savingThrowResult = target.SavingThrow(ability, SpellCasterAbility(spellCaster, ability));
                 int totalDamage;
                 bool savingThrowFailed = false;
                 
@@ -94,7 +94,7 @@ internal partial class Spells
                     {
                         // Search at the ConditionService class for the method corresponding the condition
                         ConditionsService cs = new();
-                        cs.ApplyCondition(Condition, target);
+                        cs.ApplyCondition(Condition, target, spellCaster);
                     }
                 }
             }
@@ -104,12 +104,7 @@ internal partial class Spells
 
     private int SpellCasterAbility(Character spellCaster, string ability)
     {
-        return 8 + spellCaster.Proficiency + spellCaster.ModifierValue(spellCaster.AbilityScores[ability]);
-    }
-
-    public static string FirstLetterUpper(string text)
-    {
-        return char.ToUpper(text[0]) + text[1..];
+        return 8 + spellCaster.Proficiency + Character.ModifierValue(spellCaster.AbilityScores[ability]);
     }
 
     private Damage SpellDamageByDescription()
