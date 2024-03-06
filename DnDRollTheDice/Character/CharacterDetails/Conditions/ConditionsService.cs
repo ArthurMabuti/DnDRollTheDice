@@ -19,10 +19,16 @@ internal class ConditionsService
             Console.WriteLine($"Method to apply the {condition} condition not found.");
         }
     }
-    public static void ApplyPoisonedCondition(Character character)
+    public static void ApplyPoisonedCondition(Character target)
     {
-        // Implementation to apply the "Poisoned" condition to the character
-        character.RollType = DiceRolls.RollType.Disadvantage;
+        // Poisoned character attack with disadvantage
+        target.RollType = DiceRolls.RollType.Disadvantage;
+    }
+
+    public static void ApplyBlindedCondition(Character target)
+    {
+        // Blinded character attack with disadvantage
+        target.RollType = DiceRolls.RollType.Disadvantage;
     }
 
     public static void ApplyBlindedCondition(Character character)
