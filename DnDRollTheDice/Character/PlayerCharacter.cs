@@ -24,6 +24,13 @@ internal class PlayerCharacter : Character
                 MakingAnAttack(allCharacters, null);
                 break;
             case "spell casting":
+                List<string> nonMagicalClass = ["Fighter", "Rogue", "Barbarian", "Monk"];
+                if (nonMagicalClass.Contains(Class!))
+                {
+                    await Console.Out.WriteLineAsync("You are not a spell caster!");
+                    Console.ReadKey();
+                    break;
+                }
                 Console.Clear();
                 SpellsLevelList();
                 string spellLevel = Console.ReadLine()!.ToLower();
