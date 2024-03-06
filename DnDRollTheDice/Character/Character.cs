@@ -50,7 +50,7 @@ internal class Character
         CombatSystem.AddCharacter(this);
     }
 
-    public int ModifierValue(int abilityScore)
+    public static int ModifierValue(int abilityScore)
     {
         double modifier = (double)(abilityScore - 10) / 2;
         return (int)Math.Floor(modifier);
