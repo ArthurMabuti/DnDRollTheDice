@@ -214,6 +214,7 @@ internal class Character
 
     public void DealingDamage(Character target, string actionName, int attackRoll, Spells? spell = null)
     {
+        // If attackRoll failed because of a condition, returns -1
         if (attackRoll == -1)
         {
             Console.WriteLine("Attack Failed");
