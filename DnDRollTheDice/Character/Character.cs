@@ -308,7 +308,7 @@ internal class Character
     {
         if (Class != null)
         {
-            ClassList? classList = await apiService!.GetClassFromApiAsync(Class);
+            ClassList? classList = await ApiService.GetClassFromApiAsync(Class);
             ClassInformation = classList?.Class?.First();
         }
     }
