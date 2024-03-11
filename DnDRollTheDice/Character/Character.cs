@@ -1,12 +1,12 @@
 ﻿using DnDRollTheDice.Character.CharacterClass;
 using DnDRollTheDice.Character.CharacterDetails;
 using DnDRollTheDice.Character.CharacterDetails.Conditions;
-using ConditionClass = DnDRollTheDice.Character.CharacterDetails.Conditions;
 using DnDRollTheDice.Character.CharacterItems;
 using DnDRollTheDice.Character.CharacterSpells;
 using DnDRollTheDice.DiceRolls;
 using DnDRollTheDice.Services;
 using System.Text.Json.Serialization;
+using ConditionClass = DnDRollTheDice.Character.CharacterDetails.Conditions;
 
 namespace DnDRollTheDice.Character;
 internal class Character
@@ -94,12 +94,7 @@ internal class Character
         // Verifies if the target being hit have a condition that creates advantage|disadvantage when attacking
         RollType rollType = VerifyAdvantage(target);
 
-        // Verifies if the target is attackable
-        if (UnattackableTarget.Contains(target))
-        {
-            Console.WriteLine("Can't attack your charmer!"); 
-            return -1;
-        }
+        if (!CanAttackWithCondition(target, actionName!, spell!)) return -1;
 
         // Verifies if the dice roll will be made with normally or with advantage or disadvantage and makes the roll
         int diceRolled = DetermineDiceRoll(rollType);
@@ -120,6 +115,30 @@ internal class Character
         }
 
         return attackValue;
+    }
+
+    private bool CanAttackWithCondition(Character target, string actionName, Spells spell)
+    {
+        //Frightened Condition
+        if (this.Conditions!.Contains(ConditionClass.Conditions.Frightened))
+        {
+            // Verifies if the attacking character is a monster or playerCharacter. Set the verification of meleeAttack differently
+            bool meleeAttack = (this is Monster m) ? m.SelectMonsterAction(actionName!).AttackRange!.Equals("Melee") : Weapon.Range!.Equals("Melee");
+            //If the attacking character is frightened, is using a weapon attack against his source of fear and it's melee, the attack fails
+            if (UnattackableTarget.Contains(target) && spell == null && meleeAttack)
+            {
+                Console.WriteLine("Can't get closer to the source of your fear");
+                return false;
+            }
+        }
+        // Charmed Condition
+        if (this.Conditions!.Contains(ConditionClass.Conditions.Charmed) && UnattackableTarget.Contains(target))
+        {
+            Console.WriteLine("Can't attack your charmer!");
+            return false;
+        }
+        // If none of the conditions are fullfiled, so it can attack
+        return true;
     }
 
     private static int DetermineDiceRoll(RollType rollType)
@@ -197,7 +216,7 @@ internal class Character
         string? attackSource = AttackSource(spell);
 
         // If a monster chose multiattack it makes the combination of attacks from it's class
-        if(attackSource.ToLower() == "multiattack")
+        if(attackSource.Equals("multiattack", StringComparison.CurrentCultureIgnoreCase))
         {
             Monster? monster = this as Monster;
             monster!.MultiAttack(target);
@@ -308,7 +327,7 @@ internal class Character
     {
         if (Class != null)
         {
-            ClassList? classList = await apiService!.GetClassFromApiAsync(Class);
+            ClassList? classList = await ApiService.GetClassFromApiAsync(Class);
             ClassInformation = classList?.Class?.First();
         }
     }

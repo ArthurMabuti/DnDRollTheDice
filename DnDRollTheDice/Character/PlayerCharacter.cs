@@ -24,13 +24,7 @@ internal class PlayerCharacter : Character
                 MakingAnAttack(allCharacters, null);
                 break;
             case "spell casting":
-                List<string> nonMagicalClass = ["Fighter", "Rogue", "Barbarian", "Monk"];
-                if (nonMagicalClass.Contains(Class!))
-                {
-                    await Console.Out.WriteLineAsync("You are not a spell caster!");
-                    Console.ReadKey();
-                    break;
-                }
+                if (!MagicalClass(this)) break;
                 Console.Clear();
                 SpellsLevelList();
                 string spellLevel = Console.ReadLine()!.ToLower();
@@ -50,7 +44,19 @@ internal class PlayerCharacter : Character
         }
     }
 
-    private void ActionList()
+    private static bool MagicalClass(Character character)
+    {
+        List<string> nonMagicalClass = ["Fighter", "Rogue", "Barbarian", "Monk"];
+        if (nonMagicalClass.Contains(character.Class!))
+        {
+            Console.WriteLine("You are not a spell caster!");
+            Console.ReadKey();
+            return false;
+        }
+        return true;
+    }
+
+    private static void ActionList()
     {
         Console.WriteLine("Weapon Attack");
         Console.WriteLine("Spell Casting");
@@ -84,8 +90,7 @@ Level 3");
 
     private async Task GetSpells(int level)
     {
-        ApiService api = new();
-        SpellList? spellList = await api.GetSpellListFromApiAsync(level, ClassInformation!.Name!);
+        SpellList? spellList = await ApiService.GetSpellListFromApiAsync(level, ClassInformation!.Name!);
         foreach(var spell in spellList!.Spells!)
         {
             KnownSpells.Add(spell);

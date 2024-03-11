@@ -16,7 +16,7 @@ PlayerCharacter brocc = new()
 };
 PlayerCharacter njarsen = new()
 {
-    Name = "Njarsen",
+    Name = "Njarlsen",
     Class = "Fighter",
     Proficiency = 3,
     HitPoints = 50
@@ -43,8 +43,8 @@ njarsen.CharacterWithRandomAbilityScore();
 
 #region Testing Monster API
 
-Monster? monster1 = await apiService.GetMonsterFromApiAsync("griffon");
-Monster? monster2 = await apiService.GetMonsterFromApiAsync("hill-giant");
+Monster? monster1 = await ApiService.GetMonsterFromApiAsync("griffon");
+Monster? monster2 = await ApiService.GetMonsterFromApiAsync("hill-giant");
 
 //Monster? monster = new();
 //monster.UseManualStatus();
@@ -54,8 +54,8 @@ Monster? monster2 = await apiService.GetMonsterFromApiAsync("hill-giant");
 
 #region Testing Weapon API
 
-Weapon? quarterstaff = await apiService.GetWeaponFromApiAsync("quarterstaff");
-Weapon? greatsword = await apiService.GetWeaponFromApiAsync("greatsword");
+Weapon? quarterstaff = await ApiService.GetWeaponFromApiAsync("quarterstaff");
+Weapon? greatsword = await ApiService.GetWeaponFromApiAsync("greatsword");
 brocc.Weapon = quarterstaff!;
 njarsen.Weapon = greatsword!;
 //Console.WriteLine(bruenor.ReachArmorClass(monster!));
@@ -87,7 +87,7 @@ njarsen.Weapon = greatsword!;
 
 #region Testing Other API
 
-//SpellList? listOfSpells = await apiService.GetSpellListFromApiAsync(0, brocc.Class);
+//SpellList? listOfSpells = await ApiService.GetSpellListFromApiAsync(0, brocc.Class);
 
 //foreach (var spell in listOfSpells!.Spells!)
 //{
