@@ -24,13 +24,7 @@ internal class PlayerCharacter : Character
                 MakingAnAttack(allCharacters, null);
                 break;
             case "spell casting":
-                List<string> nonMagicalClass = ["Fighter", "Rogue", "Barbarian", "Monk"];
-                if (nonMagicalClass.Contains(Class!))
-                {
-                    await Console.Out.WriteLineAsync("You are not a spell caster!");
-                    Console.ReadKey();
-                    break;
-                }
+                if (!MagicalClass(this)) break;
                 Console.Clear();
                 SpellsLevelList();
                 string spellLevel = Console.ReadLine()!.ToLower();
@@ -48,6 +42,18 @@ internal class PlayerCharacter : Character
                 Console.WriteLine("That isn't an option");
                 break;
         }
+    }
+
+    private static bool MagicalClass(Character character)
+    {
+        List<string> nonMagicalClass = ["Fighter", "Rogue", "Barbarian", "Monk"];
+        if (nonMagicalClass.Contains(character.Class!))
+        {
+            Console.WriteLine("You are not a spell caster!");
+            Console.ReadKey();
+            return false;
+        }
+        return true;
     }
 
     private static void ActionList()
