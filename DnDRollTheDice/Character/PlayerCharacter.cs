@@ -50,7 +50,7 @@ internal class PlayerCharacter : Character
         }
     }
 
-    private void ActionList()
+    private static void ActionList()
     {
         Console.WriteLine("Weapon Attack");
         Console.WriteLine("Spell Casting");
@@ -84,7 +84,6 @@ Level 3");
 
     private async Task GetSpells(int level)
     {
-        ApiService api = new();
         SpellList? spellList = await ApiService.GetSpellListFromApiAsync(level, ClassInformation!.Name!);
         foreach(var spell in spellList!.Spells!)
         {
