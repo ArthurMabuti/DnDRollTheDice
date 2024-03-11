@@ -40,9 +40,12 @@ internal class ConditionsService
         target.UnattackableTarget.Add(charmer);
     }
 
-    public static void RemoveFrightenedCondition(Character character)
+    public static void ApplyFrightenedCondition(Character target, Character sourceOfFear)
     {
-        // Implementação para remover a condição "Frightened" do personagem
+        // Frightened creatures attack with disadvantage while his source of fear is conscious
+        target.RollType = DiceRolls.RollType.Disadvantage;
+        // Frightened creatures can't melee attack their source of fear
+        target.UnattackableTarget.Add(sourceOfFear);
     }
 
     // Outros métodos relacionados às condições
