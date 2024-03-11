@@ -1,12 +1,12 @@
 ﻿using DnDRollTheDice.Character.CharacterClass;
 using DnDRollTheDice.Character.CharacterDetails;
 using DnDRollTheDice.Character.CharacterDetails.Conditions;
-using ConditionClass = DnDRollTheDice.Character.CharacterDetails.Conditions;
 using DnDRollTheDice.Character.CharacterItems;
 using DnDRollTheDice.Character.CharacterSpells;
 using DnDRollTheDice.DiceRolls;
 using DnDRollTheDice.Services;
 using System.Text.Json.Serialization;
+using ConditionClass = DnDRollTheDice.Character.CharacterDetails.Conditions;
 
 namespace DnDRollTheDice.Character;
 internal class Character
@@ -197,7 +197,7 @@ internal class Character
         string? attackSource = AttackSource(spell);
 
         // If a monster chose multiattack it makes the combination of attacks from it's class
-        if(attackSource.ToLower() == "multiattack")
+        if(attackSource.Equals("multiattack", StringComparison.CurrentCultureIgnoreCase))
         {
             Monster? monster = this as Monster;
             monster!.MultiAttack(target);
