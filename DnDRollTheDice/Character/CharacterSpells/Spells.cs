@@ -102,7 +102,7 @@ internal partial class Spells
         Console.ReadKey();
     }
 
-    private int SpellCasterAbility(Character spellCaster, string ability)
+    private static int SpellCasterAbility(Character spellCaster, string ability)
     {
         return 8 + spellCaster.Proficiency + Character.ModifierValue(spellCaster.AbilityScores[ability]);
     }
