@@ -16,7 +16,7 @@ PlayerCharacter brocc = new()
 };
 PlayerCharacter njarsen = new()
 {
-    Name = "Njarsen",
+    Name = "Njarlsen",
     Class = "Fighter",
     Proficiency = 3,
     HitPoints = 50
